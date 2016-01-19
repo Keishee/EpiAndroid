@@ -56,6 +56,7 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    private final String TAG = "LoginActivity";
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -326,8 +327,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             try {
 
-                // Simulate network access.
-                Log.i("loginActivity", "step 1");
+                //Network access.
                 URL url = new URL("https://epitech-api.herokuapp.com/login");
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                 //conn.setReadTimeout(10000);
@@ -345,25 +345,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 wr.writeBytes(urlParameters);
                 wr.flush();
                 wr.close();
-                Log.i("loginActivity", "step 3 : " + conn.getResponseMessage());
                 //Get Response
                 InputStream is = conn.getInputStream();
-                Log.i("loginActivity", "step 4");
                 BufferedReader rd = new BufferedReader(new InputStreamReader(is, "utf-8"));
                 String line;
-                Log.i("loginActivity", "step 5");
                 StringBuffer response = new StringBuffer();
                 while((line = rd.readLine()) != null) {
                     response.append(line);
                     response.append("\n");
                 }
-                Log.i("loginActivity", "step 6");
                 rd.close();
-                Log.i("loginActivity", "response : " + response.toString());
-                Log.i("loginActivity", "step 7");
+                Log.i(TAG, "response : " + response.toString());
 
-
-                Thread.sleep(2000);
             } catch (Exception e) {
                 Log.e("loginActivity", e.getMessage());
                 return false;
