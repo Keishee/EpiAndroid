@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,8 +29,25 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -190,12 +208,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return true;
     }
 
     /**
@@ -307,18 +325,48 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+                // Simulate network access.
+                Log.i("loginActivity", "step 1");
+                URL url = new URL("https://epitech-api.herokuapp.com/login");
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                //conn.setReadTimeout(10000);
+                //conn.setConnectTimeout(15000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                Log.i("loginActivity", "step 2");
+                String urlParameters =
+                        "login=" + URLEncoder.encode(mEmail, "UTF-8") +
+                                "&password=" + URLEncoder.encode(mPassword, "UTF-8");
+
+                DataOutputStream wr = new DataOutputStream (
+                        conn.getOutputStream ());
+                wr.writeBytes(urlParameters);
+                wr.flush();
+                wr.close();
+                Log.i("loginActivity", "step 3 : " + conn.getResponseMessage());
+                //Get Response
+                InputStream is = conn.getInputStream();
+                Log.i("loginActivity", "step 4");
+                BufferedReader rd = new BufferedReader(new InputStreamReader(is, "utf-8"));
+                String line;
+                Log.i("loginActivity", "step 5");
+                StringBuffer response = new StringBuffer();
+                while((line = rd.readLine()) != null) {
+                    response.append(line);
+                    response.append("\n");
                 }
+                Log.i("loginActivity", "step 6");
+                rd.close();
+                Log.i("loginActivity", "response : " + response.toString());
+                Log.i("loginActivity", "step 7");
+
+
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                Log.e("loginActivity", e.getMessage());
+                return false;
             }
 
             // TODO: register the new account here.
