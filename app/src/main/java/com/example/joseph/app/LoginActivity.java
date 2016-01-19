@@ -30,6 +30,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.joseph.app.helper.ApiManager;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -323,39 +325,42 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            try {
-                //Network access.
-                URL url = new URL("https://epitech-api.herokuapp.com/login");
-                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                Log.i("loginActivity", "step 2");
-                String urlParameters =
-                        "login=" + URLEncoder.encode(mEmail, "UTF-8") +
-                                "&password=" + URLEncoder.encode(mPassword, "UTF-8");
+//            try {
+//                //Network access.
+//                URL url = new URL("https://epitech-api.herokuapp.com/login");
+//                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+//                conn.setRequestMethod("POST");
+//                conn.setDoInput(true);
+//                conn.setDoOutput(true);
+//                Log.i("loginActivity", "step 2");
+//                String urlParameters =
+//                        "login=" + URLEncoder.encode(mEmail, "UTF-8") +
+//                                "&password=" + URLEncoder.encode(mPassword, "UTF-8");
+//
+//                DataOutputStream wr = new DataOutputStream (
+//                        conn.getOutputStream ());
+//                wr.writeBytes(urlParameters);
+//                wr.flush();
+//                wr.close();
+//                //Get Response
+//                InputStream is = conn.getInputStream();
+//                BufferedReader rd = new BufferedReader(new InputStreamReader(is, "utf-8"));
+//                String line;
+//                StringBuffer response = new StringBuffer();
+//                while((line = rd.readLine()) != null) {
+//                    response.append(line);
+//                    response.append("\n");
+//                }
+//                rd.close();
+//                Log.i(TAG, "response : " + response.toString());
+//
+//            } catch (Exception e) {
+//                Log.e(TAG, e.getMessage());
+//                return false;
+//            }
 
-                DataOutputStream wr = new DataOutputStream (
-                        conn.getOutputStream ());
-                wr.writeBytes(urlParameters);
-                wr.flush();
-                wr.close();
-                //Get Response
-                InputStream is = conn.getInputStream();
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is, "utf-8"));
-                String line;
-                StringBuffer response = new StringBuffer();
-                while((line = rd.readLine()) != null) {
-                    response.append(line);
-                    response.append("\n");
-                }
-                rd.close();
-                Log.i(TAG, "response : " + response.toString());
-
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                return false;
-            }
+            String ret = ApiManager.postApiCall("login", "login", mEmail, "password", mPassword);
+            Log.i(TAG, "response : " + ret);
 
             // TODO: register the new account here.
             return true;
