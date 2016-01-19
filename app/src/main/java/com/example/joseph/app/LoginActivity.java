@@ -323,15 +323,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
-
                 //Network access.
                 URL url = new URL("https://epitech-api.herokuapp.com/login");
                 HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                //conn.setReadTimeout(10000);
-                //conn.setConnectTimeout(15000);
                 conn.setRequestMethod("POST");
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
@@ -358,7 +353,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Log.i(TAG, "response : " + response.toString());
 
             } catch (Exception e) {
-                Log.e("loginActivity", e.getMessage());
+                Log.e(TAG, e.getMessage());
                 return false;
             }
 
