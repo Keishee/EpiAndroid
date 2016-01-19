@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">App</string>
+    <string name="app_name">EpiDroid</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Login</string>
