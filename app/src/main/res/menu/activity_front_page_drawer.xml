@@ -4,33 +4,24 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_gallery"
             android:title="Home" />
         <item
-            android:id="@+id/nav_module"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Module" />
-        <item
             android:id="@+id/nav_planning"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_camera"
             android:title="Planning" />
         <item
-            android:id="@+id/nav_profil"
+            android:id="@+id/nav_module"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Module" />
+        <item
+            android:id="@+id/nav_grade"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Profil" />
+            android:title="Grade" />
+        <item
+            android:id="@+id/nav_trombi"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Trombi" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
 
 </menu>

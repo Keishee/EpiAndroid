@@ -1,12 +1,14 @@
 package com.example.joseph.app;
 
 import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,9 +18,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 
 public class FrontPageActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.OnFragmentInteractionListener,
+        PlanningFragment.OnFragmentInteractionListener, ModuleFragment.OnFragmentInteractionListener, GradeFragment.OnFragmentInteractionListener,
+        TrombiFragment.OnFragmentInteractionListener {
+
+    private final String TAG = "FrontPageActivity";
+    private Fragment currentFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +34,6 @@ public class FrontPageActivity extends AppCompatActivity
         setContentView(R.layout.activity_front_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -38,11 +45,8 @@ public class FrontPageActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        HomeFragment homeFragment = new HomeFragment();
-        fragmentTransaction.add(R.id.relativeLayout, homeFragment);
-        fragmentTransaction.commit();
+        loadFragment(1);
+
     }
 
     @Override
@@ -84,17 +88,15 @@ public class FrontPageActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_module) {
-
+            loadFragment(1);
         } else if (id == R.id.nav_planning) {
-
-        } else if (id == R.id.nav_profil) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            loadFragment(2);
+        } else if (id == R.id.nav_module) {
+            loadFragment(3);
+        } else if (id == R.id.nav_grade) {
+            loadFragment(4);
+        } else if (id == R.id.nav_trombi) {
+            loadFragment(5);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -105,5 +107,41 @@ public class FrontPageActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
         // TODO: Savoir a quoi ca sert ty
+    }
+
+    //Handle fragment change
+    public void loadFragment(int i) {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        HomeFragment homeFragment = new HomeFragment();
+//        fragmentTransaction.add(R.id.relativeLayout, homeFragment);
+//        fragmentTransaction.commit();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (currentFragment != null) {
+            fragmentTransaction.remove(currentFragment);
+            fragmentTransaction.commit();
+            fragmentTransaction = fragmentManager.beginTransaction();
+        }
+        switch (i) {
+            case 1:
+                currentFragment = new HomeFragment();
+                break;
+            case 2:
+                currentFragment = new PlanningFragment();
+                break;
+            case 3:
+                currentFragment = new ModuleFragment();
+                break;
+            case 4:
+                currentFragment = new GradeFragment();
+                break;
+            case 5:
+                currentFragment = new TrombiFragment();
+                break;
+        }
+        fragmentTransaction.add(R.id.relativeLayout, currentFragment);
+        fragmentTransaction.commit();
     }
 }
