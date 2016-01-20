@@ -1,7 +1,6 @@
 package com.example.joseph.app.helper;
 
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -49,7 +48,45 @@ public class ApiManager {
             InputStream is = conn.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, "utf-8"));
             String line;
-            StringBuffer response = new StringBuffer();
+            StringBuilder response = new StringBuilder();
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append("\n");
+            }
+            rd.close();
+            return response.toString();
+        } catch (Exception e) {
+            Log.e("ApiManager", e.getMessage());
+            return "";
+        }
+    }
+
+    public static String getApiCall(String module, String... args) {
+        try {
+            //conn.setReadTimeout(10000);
+            //conn.setConnectTimeout(15000);
+
+            String urlParameter = "https://epitech-api.herokuapp.com/" + module + "?";
+            int k = 0;
+            for (String arg : args) {
+                if (k % 2 == 0)
+                    urlParameter += arg + "=";
+                else
+                    urlParameter += arg;
+                ++k;
+            }
+
+            URL url = new URL(urlParameter);
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+            //Get Response
+            InputStream is = conn.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, "utf-8"));
+            String line;
+            StringBuilder response = new StringBuilder();
             while ((line = rd.readLine()) != null) {
                 response.append(line);
                 response.append("\n");
@@ -62,3 +99,4 @@ public class ApiManager {
         }
     }
 }
+
