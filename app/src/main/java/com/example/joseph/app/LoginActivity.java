@@ -22,36 +22,19 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.joseph.app.helper.ApiManager;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -377,7 +360,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             String ret = ApiManager.postApiCall("login", "login", mEmail, "password", mPassword);
             Log.i(TAG, "response : " + ret);
 
-            // TODO: register the new account here.
+            try { // TODO: remove that
+                JsonParser parser = new JsonParser();
+                JsonObject object = (JsonObject)parser.parse(ret);
+//                JsonArray token = (JsonArray) parser.parse(ret);
+//                JsonElement element = object.get("token");
+
+//                JsonObject object = wtf.getAsJsonObject();
+                Log.i(TAG + "OMGWTF", object.get("token").getAsString());
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
             return true;
         }
 
