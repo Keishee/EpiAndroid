@@ -80,7 +80,6 @@ public class ApiManager {
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
-            conn.setDoOutput(true);
 
             //Get Response
             InputStream is = conn.getInputStream();
