@@ -1,12 +1,27 @@
 package com.example.joseph.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.example.joseph.app.helper.ApiIntra;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import com.google.gson.JsonArray;
+//import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -26,6 +41,7 @@ public class GradeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View   view;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,11 +76,14 @@ public class GradeFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_grade, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
+        return view;
+//        return inflater.inflate(R.layout.fragment_grade, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -73,6 +92,32 @@ public class GradeFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+    private void getAllMarks() {
+        try {
+            ApiIntra.getMarks();
+            SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+            String json = prefs.getString("marks", null);
+
+            JsonParser parser = new JsonParser();
+            JsonObject marks = (JsonObject)parser.parse(json);
+
+            JsonArray array = marks.getAsJsonArray("notes");
+            for (int i = 0; i < array.size(); i++)
+            {
+                JsonElement title =  array.get(i).getAsJsonObject().get("title");
+                ((TextView)(view.findViewById(R.id.title))).setText(title.getAsString());
+            }} catch (Exception e) {
+                Log.e("GetAllMarks", e.getMessage());
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+//        getAllMarks();
+    }
+
 
     @Override
     public void onAttach(Context context) {
