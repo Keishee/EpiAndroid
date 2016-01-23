@@ -72,7 +72,7 @@ public class ApiManager {
                 if (k % 2 == 0)
                     urlParameter += arg + "=";
                 else
-                    urlParameter += arg;
+                    urlParameter += arg + "&";
                 ++k;
             }
 
