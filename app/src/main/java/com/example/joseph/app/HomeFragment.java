@@ -117,9 +117,7 @@ public class HomeFragment extends Fragment {
             public void run() {
                 try {
                     String login = ((FrontPageActivity)getActivity()).getLogin();
-                    ApiIntra.getUser(login);
-                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-                    String response = prefs.getString("user", null);
+                    String response = ApiIntra.getUser(login);
                     JsonParser jp = new JsonParser();
                     JsonObject jresp = (JsonObject)jp.parse(response);
                     JsonObject jo = (JsonObject)jresp.get("nsstat");

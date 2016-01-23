@@ -278,6 +278,6 @@ public class ApiIntra {
      * "login":"login_x"
      */
     public static String getUser(String login) {
-        return ApiManager.getApiCall("user", "token", _token, "login", login);
+        return ApiManager.getApiCall("user", "token", _token, "user", login);
     }
 }
