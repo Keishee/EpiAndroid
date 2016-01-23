@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 
+import com.example.joseph.app.helper.ApiIntra;
+
 public class FrontPageActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.OnFragmentInteractionListener,
         PlanningFragment.OnFragmentInteractionListener, ModuleFragment.OnFragmentInteractionListener, GradeFragment.OnFragmentInteractionListener,
@@ -45,6 +47,7 @@ public class FrontPageActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        ApiIntra.setActivity(this);
         loadFragment(1);
 
     }
