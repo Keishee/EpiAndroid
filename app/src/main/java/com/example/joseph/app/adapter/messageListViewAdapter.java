@@ -22,7 +22,7 @@ public class messageListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return jArray.size();
     }
 
     @Override
