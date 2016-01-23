@@ -2,6 +2,7 @@ package com.example.joseph.app.helper;
 
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -23,6 +24,7 @@ public class ApiIntra {
         JsonParser parser = new JsonParser();
         JsonObject object = (JsonObject) parser.parse(tmp);
         _token = object.get("token").getAsString();
+        Log.i("ApiIntra", _token);
     }
 
     public static void setToken(String token) {

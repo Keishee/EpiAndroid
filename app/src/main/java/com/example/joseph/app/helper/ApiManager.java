@@ -76,6 +76,8 @@ public class ApiManager {
                 ++k;
             }
 
+            Log.i("ApiManager", urlParameter);
+
             URL url = new URL(urlParameter);
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setRequestMethod("GET");

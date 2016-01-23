@@ -18,6 +18,11 @@ import android.widget.TextView;
 
 import com.example.joseph.app.helper.ApiIntra;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -85,6 +90,10 @@ public class HomeFragment extends Fragment {
                     ApiIntra.getPhoto(((FrontPageActivity) getActivity()).getLogin());
                     SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
                     String url = prefs.getString("photo", null);
+                    JsonParser jp = new JsonParser();
+                    JsonObject jo = (JsonObject) jp.parse(url);
+                    JsonElement je = jo.get("url");
+                    url = je.getAsString();
                     InputStream is = new URL(url).openStream();
                     final Drawable d = Drawable.createFromStream(is, "picture");
                     handler.post(new Runnable() {
@@ -94,7 +103,7 @@ public class HomeFragment extends Fragment {
                         }
                     });
                 } catch (Exception e) {
-                    Log.e("ImageView", "lol" + e.getMessage());
+                    Log.e("ImageView", e.getMessage());
                 }
             }
         };
