@@ -19,7 +19,7 @@ public class ApiIntra {
     }
 
     public static void postToken(String name, String password) {
-        String tmp = ApiManager.postApiCall("login", name, "password", password);
+        String tmp = ApiManager.postApiCall("login", "login", name, "password", password);
         JsonParser parser = new JsonParser();
         JsonObject object = (JsonObject) parser.parse(tmp);
         _token = object.get("token").getAsString();

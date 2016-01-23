@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
                 try {
                     ApiIntra.getPhoto(((FrontPageActivity) getActivity()).getLogin());
                     SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-                    String url = prefs.getString("url", null);
+                    String url = prefs.getString("photo", null);
                     InputStream is = new URL(url).openStream();
                     final Drawable d = Drawable.createFromStream(is, "picture");
                     handler.post(new Runnable() {

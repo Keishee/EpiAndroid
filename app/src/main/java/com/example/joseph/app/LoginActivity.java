@@ -359,21 +359,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                Log.e(TAG, e.getMessage());
 //                return false;
 //            }
+            ApiIntra.postToken(mEmail, mPassword);
+            //String ret = ApiManager.postApiCall("login", "login", mEmail, "password", mPassword);
+            //Log.i(TAG, "response : " + ret);
 
-            String ret = ApiManager.postApiCall("login", "login", mEmail, "password", mPassword);
-            Log.i(TAG, "response : " + ret);
-
-            try { // TODO: remove that
-                JsonParser parser = new JsonParser();
-                JsonObject object = (JsonObject)parser.parse(ret);
-//                JsonArray token = (JsonArray) parser.parse(ret);
-//                JsonElement element = object.get("token");
-
-//                JsonObject object = wtf.getAsJsonObject();
-                Log.i(TAG + "OMGWTF", object.get("token").getAsString());
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
+//            try { // TODO: remove that
+//                JsonParser parser = new JsonParser();
+//                JsonObject object = (JsonObject)parser.parse(ret);
+////                JsonArray token = (JsonArray) parser.parse(ret);
+////                JsonElement element = object.get("token");
+//
+////                JsonObject object = wtf.getAsJsonObject();
+//                Log.i(TAG + "OMGWTF", object.get("token").getAsString());
+//            } catch (Exception e) {
+//                Log.e(TAG, e.getMessage());
+//            }
             return true;
         }
 
