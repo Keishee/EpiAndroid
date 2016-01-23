@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment {
     private void getUserImageAndShow() {
         final ImageView image = (ImageView)view.findViewById(R.id.photo_home);
         final Handler handler = new Handler();
-        Runnable r = new Runnable() {
+        new Thread(new Runnable() {
             public void run() {
                 try {
                     ApiIntra.getPhoto(((FrontPageActivity) getActivity()).getLogin());
@@ -108,8 +108,7 @@ public class HomeFragment extends Fragment {
                     Log.e("ImageView", e.getMessage());
                 }
             }
-        };
-        new Thread(r).start();
+        }).start();
     }
 
     private void getUserLogTimeAndShow() {
