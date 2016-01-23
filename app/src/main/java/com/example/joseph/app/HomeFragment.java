@@ -84,7 +84,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void getUserImageAndShow() {
-        final ImageView image = (ImageView)view.findViewById(R.id.photo_home);
         final Handler handler = new Handler();
         new Thread(new Runnable() {
             public void run() {
@@ -101,6 +100,7 @@ public class HomeFragment extends Fragment {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            ImageView image = (ImageView)view.findViewById(R.id.photo_home);
                             image.setImageDrawable(d);
                         }
                     });
@@ -113,7 +113,6 @@ public class HomeFragment extends Fragment {
 
     private void getUserLogTimeAndShow() {
         final Handler handler = new Handler();
-        final TextView log = (TextView)view.findViewById(R.id.logTextView);
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -126,6 +125,7 @@ public class HomeFragment extends Fragment {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            TextView log = (TextView)view.findViewById(R.id.logTextView);
                             log.setText("Active time: " + hours + " hour(s)");
                         }
                     });
