@@ -14,9 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.helper.ApiIntra;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -150,11 +152,11 @@ public class HomeFragment extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-//                        for (JsonElement elem : array) {
-//                            JsonObject obj = (JsonObject)elem;
-//                            String title = obj.get("title").getAsString();
-//                            String content = obj.get("content").getAsString();
-//                        }
+                        ListView yourListView = (ListView) getActivity().findViewById(R.id.messageListView);
+
+                        messageListViewAdapter customAdapter = new messageListViewAdapter(getActivity().getApplicationContext(), array);
+
+                        yourListView .setAdapter(customAdapter);
 
                     }
                 });
