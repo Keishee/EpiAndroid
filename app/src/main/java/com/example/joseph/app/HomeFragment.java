@@ -110,11 +110,40 @@ public class HomeFragment extends Fragment {
         new Thread(r).start();
     }
 
+    private void getUserLogTimeAndShow() {
+        final Handler handler = new Handler();
+        final TextView log = (TextView)view.findViewById(R.id.logTextView);
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String login = ((FrontPageActivity)getActivity()).getLogin();
+                    ApiIntra.getUser(login);
+                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                    String response = prefs.getString("user", null);
+                    JsonParser jp = new JsonParser();
+                    JsonObject jresp = (JsonObject)jp.parse(response);
+                    JsonObject jo = (JsonObject)jresp.get("nsstat");
+                    JsonElement hoursElement = jo.get("active");
+                    final String hours = (hoursElement.isJsonNull() ? "0" : hoursElement.getAsString()) ;
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            log.setText("Active time:" + hours + " hours");
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("ImageView", e.getMessage());
+                }
+            }
+        }).start();
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         ((TextView)(view.findViewById(R.id.login_home_textview))).setText(((FrontPageActivity) getActivity()).getLogin());
         getUserImageAndShow();
+        getUserLogTimeAndShow();
     }
 
     @Override

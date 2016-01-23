@@ -278,7 +278,7 @@ public class ApiIntra {
      * "login":"login_x"
      */
     public static void getUser(String login) {
-        String tmp = ApiManager.getApiCall("user", "token", _token, "login", login);
+        String tmp = ApiManager.getApiCall("user", "token", _token, "user", login);
         SharedPreferences.Editor editor = activity.getPreferences(activity.MODE_PRIVATE).edit();
         editor.putString("user", tmp);
         editor.commit();
