@@ -29,6 +29,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.helper.ApiManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -106,6 +107,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        ApiIntra.setActivity(this);
     }
 
     private void populateAutoComplete() {
