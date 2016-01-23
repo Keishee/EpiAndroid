@@ -385,6 +385,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 Intent myIntent = new Intent();
                 myIntent.setClass(getApplicationContext(), FrontPageActivity.class);
+                myIntent.putExtra("login", mEmail);
                 startActivity(myIntent);
                 finish();
             } else {
