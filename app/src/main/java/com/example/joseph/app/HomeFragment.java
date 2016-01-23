@@ -152,11 +152,8 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void run() {
                         ListView yourListView = (ListView) getActivity().findViewById(R.id.messageListView);
-
                         messageListViewAdapter customAdapter = new messageListViewAdapter(getActivity().getApplicationContext(), array);
-
                         yourListView .setAdapter(customAdapter);
-
                     }
                 });
             }

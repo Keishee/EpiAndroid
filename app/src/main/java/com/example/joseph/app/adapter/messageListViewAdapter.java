@@ -44,10 +44,10 @@ public class messageListViewAdapter extends BaseAdapter {
         String content = obj.get("content").getAsString();
         String date = obj.get("date").getAsString();
         String teacher = ((JsonObject)obj.get("user")).get("title").getAsString();
-//        ((TextView)vi.findViewById(R.id.LOUL)).setText(title);
-//        ((TextView)vi.findViewById(R.id.CONTENT)).setText(content);
-//        ((TextView)vi.findViewById(R.id.TEACHER)).setText(teacher);
-//        ((TextView)vi.findViewById(R.id.DATE)).setText(date);
+        ((TextView)vi.findViewById(R.id.titleView)).setText(title);
+        ((TextView)vi.findViewById(R.id.contentView)).setText(content);
+        ((TextView)vi.findViewById(R.id.teacherView)).setText(teacher);
+        ((TextView)vi.findViewById(R.id.dateView)).setText(date);
         return vi;
     }
 
