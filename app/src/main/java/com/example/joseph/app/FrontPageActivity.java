@@ -26,6 +26,7 @@ public class FrontPageActivity extends AppCompatActivity
         TrombiFragment.OnFragmentInteractionListener {
 
     private final String TAG = "FrontPageActivity";
+    private String login;
     private Fragment currentFragment = null;
 
     @Override
@@ -34,8 +35,7 @@ public class FrontPageActivity extends AppCompatActivity
         setContentView(R.layout.activity_front_page);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
+        login = getIntent().getStringExtra("login");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -57,6 +57,10 @@ public class FrontPageActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    public String getLogin() {
+        return login;
     }
 
     @Override

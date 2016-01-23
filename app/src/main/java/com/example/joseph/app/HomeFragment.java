@@ -1,14 +1,26 @@
 package com.example.joseph.app;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.joseph.app.helper.ApiIntra;
 import com.google.gson.Gson;
+
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
@@ -28,6 +40,7 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View view;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,11 +75,42 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void getUserImageAndShow() {
+        final ImageView image = (ImageView)view.findViewById(R.id.photo_home);
+        final Handler handler = new Handler();
+        Runnable r = new Runnable() {
+            public void run() {
+                try {
+                    String url = "http://blog.agario.pw/wp-content/uploads/2015/10/mrbean.png"/*ApiIntra::getPhoto(((FrontPageActivity) getActivity()).getLogin())*/;
+                    InputStream is = new URL(url).openStream();
+                    final Drawable d = Drawable.createFromStream(is, "src name");
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            image.setImageDrawable(d);
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e("ImageView", "lol" + e.getMessage());
+                }
+            }
+        };
+        new Thread(r).start();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((TextView)(view.findViewById(R.id.login_home_textview))).setText(((FrontPageActivity) getActivity()).getLogin());
+        getUserImageAndShow();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
