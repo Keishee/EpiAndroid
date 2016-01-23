@@ -4,8 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
+import com.example.joseph.app.R;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 
@@ -27,12 +31,15 @@ public class messageListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView (int position, View convertView, ViewGroup parent) {
-
-        /*ICI TU REMPLIS PARSE ET REMPLI LA LIST
-            -> postion c la case que c'est en train de remplir
-            -> convertView c la view de la case
-         */
-
+        JsonObject obj = (JsonObject)jArray.get(position);
+        String title = obj.get("title").getAsString();
+        String content = obj.get("content").getAsString();
+        String date = obj.get("date").getAsString();
+        String teacher = ((JsonObject)obj.get("user")).get("title").getAsString();
+//        ((TextView)convertView.findViewById(R.id.LOUL)).setText(title);
+//        ((TextView)convertView.findViewById(R.id.CONTENT)).setText(content);
+//        ((TextView)convertView.findViewById(R.id.TEACHER)).setText(teacher);
+//        ((TextView)convertView.findViewById(R.id.DATE)).setText(date);
         return null;
     }
 

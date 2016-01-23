@@ -5,11 +5,6 @@
     tools:context="com.example.joseph.app.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/login_home_textview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="home" />
 
     <ImageView
         android:layout_width="wrap_content"

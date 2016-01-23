@@ -14,10 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.joseph.app.helper.ApiIntra;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -135,12 +137,37 @@ public class HomeFragment extends Fragment {
         }).start();
     }
 
+    private void getLastMessagesAndShow() {
+        final Handler handler = new Handler();
+//        final ListView messages = (ListView)view.findViewById(R.id.logTextView);
+        new Thread(new Runnable() {
+            public void run() {
+                ApiIntra.getMessages();
+                SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                String response = prefs.getString("messages", null);
+                JsonParser jp = new JsonParser();
+                final JsonArray array = (JsonArray)jp.parse(response);
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+//                        for (JsonElement elem : array) {
+//                            JsonObject obj = (JsonObject)elem;
+//                            String title = obj.get("title").getAsString();
+//                            String content = obj.get("content").getAsString();
+//                        }
+
+                    }
+                });
+            }
+        }).start();
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        ((TextView)(view.findViewById(R.id.login_home_textview))).setText(((FrontPageActivity) getActivity()).getLogin());
         getUserImageAndShow();
         getUserLogTimeAndShow();
+        getLastMessagesAndShow();
     }
 
     @Override
