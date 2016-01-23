@@ -1,6 +1,7 @@
 package com.example.joseph.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -81,9 +82,11 @@ public class HomeFragment extends Fragment {
         Runnable r = new Runnable() {
             public void run() {
                 try {
-                    String url = "http://blog.agario.pw/wp-content/uploads/2015/10/mrbean.png"/*ApiIntra::getPhoto(((FrontPageActivity) getActivity()).getLogin())*/;
+                    ApiIntra.getPhoto(((FrontPageActivity) getActivity()).getLogin());
+                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                    String url = prefs.getString("url", null);
                     InputStream is = new URL(url).openStream();
-                    final Drawable d = Drawable.createFromStream(is, "src name");
+                    final Drawable d = Drawable.createFromStream(is, "picture");
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
