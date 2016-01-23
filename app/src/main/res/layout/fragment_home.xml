@@ -16,6 +16,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/photo_home"
         android:layout_gravity="center_horizontal|top"
-        android:layout_margin="30dp" />
+        android:layout_margin="30dp"
+        android:minHeight="190dp"
+        android:minWidth="160dp" />
 
 </FrameLayout>
