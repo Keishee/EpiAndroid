@@ -121,12 +121,11 @@ public class HomeFragment extends Fragment {
                     JsonParser jp = new JsonParser();
                     JsonObject jresp = (JsonObject)jp.parse(response);
                     JsonObject jo = (JsonObject)jresp.get("nsstat");
-                    JsonElement hoursElement = jo.get("active");
-                    final String hours = (hoursElement.isJsonNull() ? "0" : hoursElement.getAsString()) ;
+                    final String hours = jo == null ? "0" : jo.get("active").getAsString();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            log.setText("Active time:" + hours + " hours");
+                            log.setText("Active time: " + hours + " hour(s)");
                         }
                     });
                 } catch (Exception e) {
