@@ -6,13 +6,13 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Title"
             android:id="@+id/TitleMark"
@@ -28,9 +28,12 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Mark"
             android:id="@+id/MarkMark"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textColor="#3f3f3f" />
+            android:textColor="#3f3f3f"
+            android:layout_marginRight="51dp"
+            android:layout_marginEnd="51dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/AuthorMark"
+            android:layout_toStartOf="@+id/AuthorMark" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,11 +52,10 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Comment"
             android:id="@+id/CommentMark"
-            android:layout_below="@+id/contentView"
+            android:layout_below="@+id/MarkMark"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:textColor="#000000" />
 
     </RelativeLayout>
 </LinearLayout>
