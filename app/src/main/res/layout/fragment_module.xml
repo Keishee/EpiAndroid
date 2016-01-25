@@ -6,8 +6,9 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></LinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/moduleListView"
+        android:layout_gravity="center_horizontal|top" />
 </FrameLayout>
