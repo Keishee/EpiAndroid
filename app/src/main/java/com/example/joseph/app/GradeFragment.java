@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.joseph.app.adapter.moduleListViewAdapter;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonElement;
@@ -110,16 +111,26 @@ public class GradeFragment extends Fragment {
                     String json = prefs.getString("marks", null);
                     final JsonArray array = JsonGrabber.getArrayFromPath(json, "notes");
 
-                    if (array == null)
+                    ApiIntra.getModules();
+                    String mjson = prefs.getString("modules", null);
+                    final JsonArray marray = JsonGrabber.getArrayFromPath(mjson, "modules");
+
+                    if (array == null || marray == null)
                         return;
 
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
 
+                            // TODO afficher par rapport au semestre et a la matière.
                             ListView yourListView = (ListView) getActivity().findViewById(R.id.MarksListView);
                             markListViewAdapter customAdapter = new markListViewAdapter(getActivity().getApplicationContext(), array);
                             yourListView.setAdapter(customAdapter);
+
+                            ListView myourListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
+                            moduleListViewAdapter mcustomAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), marray);
+                            myourListView.setAdapter(mcustomAdapter);
+
                         }
                     });
                 } catch (Exception e) {
