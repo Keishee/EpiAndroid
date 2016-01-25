@@ -60,7 +60,7 @@ public class JsonGrabber {
                 elem = getVariableFromArray(array, token);
             }
         }
-        return null;
+        return elem.isJsonArray() ? (JsonArray)elem : null;
     }
     
     private static JsonElement getVariableFromArray(JsonArray array, String token) {
