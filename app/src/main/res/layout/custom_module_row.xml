@@ -10,5 +10,6 @@
         android:text="New Text"
         android:id="@+id/moduleTitle"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.05" />
+        android:layout_weight="0.05"
+        android:textColor="#000000" />
 </LinearLayout>
