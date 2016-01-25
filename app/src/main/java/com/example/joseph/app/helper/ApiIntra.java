@@ -43,7 +43,7 @@ public class ApiIntra {
      * "end" : "YYYY-MM-DD"
      **/
     public static void getPlanning(String start, String end) {
-        String tmp = ApiManager.getApiCall("planning", "token", _token, start, end);
+        String tmp = ApiManager.getApiCall("planning", "token", _token, "start", start, "end", end);
         SharedPreferences.Editor editor = activity.getPreferences(activity.MODE_PRIVATE).edit();
         editor.putString("planning", tmp);
         editor.commit();

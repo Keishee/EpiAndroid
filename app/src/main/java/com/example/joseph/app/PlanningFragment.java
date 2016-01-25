@@ -1,12 +1,31 @@
 package com.example.joseph.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.example.joseph.app.adapter.messageListViewAdapter;
+import com.example.joseph.app.adapter.planningListViewAdapter;
+import com.example.joseph.app.helper.ApiIntra;
+import com.example.joseph.app.helper.ApiManager;
+import com.example.joseph.app.helper.PlanningInfo;
+import com.example.joseph.app.json.JsonGrabber;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -83,6 +102,56 @@ public class PlanningFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    private void getWeeklySemesterCoursesAndShow() {
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                // TODO: set 1 week dates
+                String date = "2016-01-25";//String.valueOf(year) + '-' + String.valueOf(month) + '-' + String.valueOf(day);
+                String endDate = "2016-01-29";//String.valueOf(year) + '-' + String.valueOf(month) + '-' + String.valueOf(day);
+                ApiIntra.getPlanning(date, endDate);
+                SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                String response = prefs.getString("planning", null);
+                JsonParser parser = new JsonParser();
+                JsonArray array = (JsonArray) parser.parse(response);
+                final ArrayList<PlanningInfo> planningInfos = new ArrayList<>();
+
+                for (JsonElement elem : array) {
+                    JsonObject obj = elem.getAsJsonObject();
+                    if (obj.get("semester").getAsInt() == 5) { // TODO: recup le semestre courant
+                        String title = obj.get("acti_title").getAsString();
+                        int semester = obj.get("semester").getAsInt();
+                        String room = ((JsonObject) obj.get("room")).get("code").getAsString();
+                        String start = obj.get("start").getAsString();
+                        String end = obj.get("end").getAsString();
+                        String module = obj.get("titlemodule").getAsString();
+                        planningInfos.add(new PlanningInfo(title, module, semester, room, start, end));
+                    }
+                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ListView yourListView = (ListView) getActivity().findViewById(R.id.planningListView);
+                        planningListViewAdapter customAdapter = new planningListViewAdapter(getActivity().getApplicationContext(), planningInfos);
+                        yourListView.setAdapter(customAdapter);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getWeeklySemesterCoursesAndShow();
     }
 
     @Override

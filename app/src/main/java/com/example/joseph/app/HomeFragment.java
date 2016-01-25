@@ -104,13 +104,13 @@ public class HomeFragment extends Fragment {
                             }
                         });
                     } catch (Exception e) {
-                        Log.e("getUserImageAndShow", e.getMessage());
+                        Log.e("getUserImageAndShow", "Error: " + e.getMessage());
                     }
                 }
             }).start();
 
         } catch (Exception e) {
-            Log.e("getUserImageAndShow", e.getMessage());
+            Log.e("getUserImageAndShow", "Error: " + e.getMessage());
         }
 
     }
@@ -140,7 +140,7 @@ public class HomeFragment extends Fragment {
                         }
                     });
                 } catch (Exception e) {
-                    Log.e("getUserImageAndShow", e.getMessage());
+                    Log.e("getUserImageAndShow","Error:" + e.getMessage());
                 }
             }
         }).start();
@@ -166,7 +166,7 @@ public class HomeFragment extends Fragment {
                         }
                     });
                 } catch (Exception e) {
-                    Log.e("getUserImageAndShow", e.getMessage());
+                    Log.e("getUserImageAndShow", "Error:" + e.getMessage());
                 }
             }
         }).start();
