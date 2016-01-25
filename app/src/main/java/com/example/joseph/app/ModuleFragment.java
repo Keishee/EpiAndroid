@@ -1,12 +1,24 @@
 package com.example.joseph.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.example.joseph.app.adapter.messageListViewAdapter;
+import com.example.joseph.app.helper.ApiIntra;
+import com.example.joseph.app.json.JsonGrabber;
+import com.google.gson.JsonArray;
+
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -18,6 +30,7 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ModuleFragment extends Fragment {
+    private final String TAG = "ModuleFragment";
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -89,6 +102,52 @@ public class ModuleFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        loadModule();
+    }
+
+    public void loadModule() {
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String login = ((FrontPageActivity) getActivity()).getLogin();
+                    final String response = ApiIntra.getUser(login);
+
+                    Calendar c = Calendar.getInstance();
+                    String year = "" + c.get(Calendar.YEAR);
+                    String location = JsonGrabber.getVariableAndCast(response, "location");
+                    String course = JsonGrabber.getVariableAndCast(response, "course_code");
+                    String modules = ApiIntra.getAllModules(year, location, course);
+
+//                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+//                    String modules = prefs.getString("allModules", "");
+                    if (modules.isEmpty())
+                        return;
+
+                    Log.i(TAG, modules);
+
+                    final JsonArray array = JsonGrabber.getArrayFromPath(modules, "items");
+
+                    Log.i(TAG, array.toString());
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ListView yourListView = (ListView) getActivity().findViewById(R.id.moduleListView);
+                            messageListViewAdapter customAdapter = new messageListViewAdapter(getActivity().getApplicationContext(), array);
+                            yourListView.setAdapter(customAdapter);
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }).start();
     }
 
     /**
