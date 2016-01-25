@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 
+import com.example.joseph.app.helper.ActiveUser;
 import com.example.joseph.app.helper.ApiIntra;
 
 public class FrontPageActivity extends AppCompatActivity
@@ -30,6 +31,11 @@ public class FrontPageActivity extends AppCompatActivity
     private final String TAG = "FrontPageActivity";
     private String login;
     private Fragment currentFragment = null;
+    private ActiveUser user = null;
+
+    public ActiveUser getUser() {
+        return user;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,8 @@ public class FrontPageActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        user = new ActiveUser();
+        user.setLogin(login);
         ApiIntra.setActivity(this);
         loadFragment(1);
 

@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.joseph.app.adapter.messageListViewAdapter;
+import com.example.joseph.app.helper.ActiveUser;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonArray;
@@ -36,16 +37,7 @@ import java.net.URL;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     private View view;
-
     private OnFragmentInteractionListener mListener;
 
     public HomeFragment() {
@@ -56,16 +48,12 @@ public class HomeFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment HomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,29 +61,27 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     private void getUserImageAndShow() {
+        final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+        if (user.getUserImage() != null) {
+            ImageView image = (ImageView) view.findViewById(R.id.photo_home);
+            image.setImageDrawable(user.getUserImage());
+            return;
+        }
         try {
             final Handler handler = new Handler();
-
             new Thread(new Runnable() {
                 public void run() {
                     try {
                         ApiIntra.getPhoto(((FrontPageActivity) getActivity()).getLogin());
                         SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-                        String url = prefs.getString("photo", null);
-                        JsonParser jp = new JsonParser();
-                        JsonObject jo = (JsonObject) jp.parse(url);
-                        JsonElement je = jo.get("url");
-                        url = je.getAsString();
-                        final String url2 = url;
+                        String response = prefs.getString("photo", null);
+                        final String url2 = JsonGrabber.getVariableAndCast(response, "url");
                         InputStream is = new URL(url2).openStream();
                         final Drawable d = Drawable.createFromStream(is, "picture");
+                        user.setUserImage(d);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -116,6 +102,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void getUserInfosAndShow() {
+        final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+        if (user.getFullName() != null && user.getGPA() != null && user.getLogTime() != null) {
+            TextView log = (TextView) view.findViewById(R.id.logTextView);
+            log.setText("Log: " + user.getLogTime() + " hour(s)");
+            ((TextView) view.findViewById(R.id.userName)).setText(user.getFullName());
+            ((TextView) view.findViewById(R.id.userGPA)).setText("GPA: " + user.getGPA());
+            return;
+        }
+
         final Handler handler = new Handler();
         new Thread(new Runnable() {
             public void run() {
@@ -129,6 +124,10 @@ public class HomeFragment extends Fragment {
                     final String goodName = name == null ? "Leeroy Jenkins" : name;
                     String gpa = JsonGrabber.getVariableAndCast(response, "gpa", "gpa");
                     final String goodGPA = gpa == null ? "0" : gpa;
+                    user.setLogTime(hours);
+                    user.setFullName(goodName);
+                    user.setGPA(goodGPA);
+                    user.setSemester(Integer.parseInt((String)JsonGrabber.getVariableAndCast(response, "semester")));
 
                     handler.post(new Runnable() {
                         @Override

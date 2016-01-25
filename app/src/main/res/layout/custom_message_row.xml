@@ -45,9 +45,10 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
             android:id="@+id/dateView"
-            android:layout_below="@+id/contentView"
-            android:layout_centerHorizontal="true"
-            android:textColor="#FF3F3F3F" />
+            android:textColor="#FF3F3F3F"
+            android:layout_alignTop="@+id/teacherView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:autoLink="web"

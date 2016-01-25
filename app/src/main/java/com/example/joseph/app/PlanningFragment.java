@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.adapter.planningListViewAdapter;
+import com.example.joseph.app.helper.ActiveUser;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.helper.ApiManager;
 import com.example.joseph.app.helper.PlanningInfo;
@@ -24,8 +25,10 @@ import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -104,36 +107,46 @@ public class PlanningFragment extends Fragment {
         }
     }
 
+    private int getUserSemester() {
+        final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+        String response = ApiIntra.getUser(user.getLogin());
+        return JsonGrabber.getVariableAndCast(response, "semester");
+    }
+
     private void getWeeklySemesterCoursesAndShow() {
+        final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
         final Handler handler = new Handler();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Calendar c = Calendar.getInstance();
-                int year = c.get(Calendar.YEAR);
-                int month = c.get(Calendar.MONTH);
-                int day = c.get(Calendar.DAY_OF_MONTH);
+                int semester = user.getSemester();
+                if (semester == -1) {
+                    semester = getUserSemester();
+                    user.setSemester(semester);
+                }
+                Date cDate = new Date();
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DATE, +7);
+                String datePlusWeek =  new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 
-                // TODO: set 1 week dates
-                String date = "2016-01-25";//String.valueOf(year) + '-' + String.valueOf(month) + '-' + String.valueOf(day);
-                String endDate = "2016-01-29";//String.valueOf(year) + '-' + String.valueOf(month) + '-' + String.valueOf(day);
-                ApiIntra.getPlanning(date, endDate);
+                ApiIntra.getPlanning(date, datePlusWeek);
                 SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
                 String response = prefs.getString("planning", null);
                 JsonParser parser = new JsonParser();
                 JsonArray array = (JsonArray) parser.parse(response);
-                final ArrayList<PlanningInfo> planningInfos = new ArrayList<>();
 
+                final ArrayList<PlanningInfo> planningInfos = new ArrayList<>();
                 for (JsonElement elem : array) {
                     JsonObject obj = elem.getAsJsonObject();
-                    if (obj.get("semester").getAsInt() == 5) { // TODO: recup le semestre courant
+                    if (obj.get("semester").getAsInt() == semester) {
                         String title = obj.get("acti_title").getAsString();
-                        int semester = obj.get("semester").getAsInt();
+                        int csemester = obj.get("semester").getAsInt();
                         String room = ((JsonObject) obj.get("room")).get("code").getAsString();
                         String start = obj.get("start").getAsString();
                         String end = obj.get("end").getAsString();
                         String module = obj.get("titlemodule").getAsString();
-                        planningInfos.add(new PlanningInfo(title, module, semester, room, start, end));
+                        planningInfos.add(new PlanningInfo(title, module, csemester, room, start, end));
                     }
                 }
                 handler.post(new Runnable() {
