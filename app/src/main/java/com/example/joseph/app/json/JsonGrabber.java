@@ -69,9 +69,9 @@ public class JsonGrabber {
             JsonObject object = null;
             object = array.get(i).getAsJsonObject();
 
-            if (object == null) {
+            if (object != null) {
                 element = object.get(token);
-                if (element == null)
+                if (element != null)
                     return element;
             }
         }
