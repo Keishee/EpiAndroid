@@ -80,83 +80,63 @@ public class HomeFragment extends Fragment {
     }
 
     private void getUserImageAndShow() {
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    ApiIntra.getPhoto(((FrontPageActivity) getActivity()).getLogin());
-                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-                    String url = prefs.getString("photo", null);
-                    JsonParser jp = new JsonParser();
-                    JsonObject jo = (JsonObject) jp.parse(url);
-                    JsonElement je = jo.get("url");
-                    url = je.getAsString();
-                    InputStream is = new URL(url).openStream();
-                    final Drawable d = Drawable.createFromStream(is, "picture");
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ImageView image = (ImageView) view.findViewById(R.id.photo_home);
-                            image.setImageDrawable(d);
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e("ImageView", e.getMessage());
-                }
-            }
-        }).start();
+        try {
+            ApiIntra.getPhoto(((FrontPageActivity) getActivity()).getLogin());
+            SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+            String url = prefs.getString("photo", null);
+            JsonParser jp = new JsonParser();
+            JsonObject jo = (JsonObject) jp.parse(url);
+            JsonElement je = jo.get("url");
+            url = je.getAsString();
+            InputStream is = new URL(url).openStream();
+            final Drawable d = Drawable.createFromStream(is, "picture");
+
+            ImageView image = (ImageView) view.findViewById(R.id.photo_home);
+            image.setImageDrawable(d);
+
+        } catch (Exception e) {
+            Log.e("ImageView", e.getMessage());
+        }
+
     }
 
     private void getUserInfosAndShow() {
-        final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    String login = ((FrontPageActivity) getActivity()).getLogin();
-                    String response = ApiIntra.getUser(login);
-                    String hour = JsonGrabber.getVariableAndCast(response, "nsstat", "active");
-                    final String hours = hour == null ? "0" : hour;
-                    String name = JsonGrabber.getVariableAndCast(response, "title");
-                    final String goodName = name == null ? "Leeroy Jenkins" : name;
-                    String gpa = JsonGrabber.getVariableAndCast(response, "gpa", "gpa");
-                    final String goodGPA = gpa == null ? "0" : gpa;
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            TextView log = (TextView) view.findViewById(R.id.logTextView);
-                            log.setText("Log: " + hours + " hour(s)");
-                            ((TextView)view.findViewById(R.id.userName)).setText(goodName);
-                            ((TextView)view.findViewById(R.id.userGPA)).setText("GPA: " + goodGPA);
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e("ImageView", e.getMessage());
-                }
-            }
-        }).start();
+
+        try {
+            String login = ((FrontPageActivity) getActivity()).getLogin();
+            String response = ApiIntra.getUser(login);
+            String hour = JsonGrabber.getVariableAndCast(response, "nsstat", "active");
+            final String hours = hour == null ? "0" : hour;
+            String name = JsonGrabber.getVariableAndCast(response, "title");
+            final String goodName = name == null ? "Leeroy Jenkins" : name;
+            String gpa = JsonGrabber.getVariableAndCast(response, "gpa", "gpa");
+            final String goodGPA = gpa == null ? "0" : gpa;
+
+            TextView log = (TextView) view.findViewById(R.id.logTextView);
+            log.setText("Log: " + hours + " hour(s)");
+            ((TextView) view.findViewById(R.id.userName)).setText(goodName);
+            ((TextView) view.findViewById(R.id.userGPA)).setText("GPA: " + goodGPA);
+
+        } catch (Exception e) {
+            Log.e("ImageView", e.getMessage());
+        }
     }
 
     private void getLastMessagesAndShow() {
         final Handler handler = new Handler();
-        new Thread(new Runnable() {
-            public void run() {
-                ApiIntra.getMessages();
-                SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-                String response = prefs.getString("messages", null);
-                JsonParser jp = new JsonParser();
-                try {
-                    final JsonArray array = (JsonArray) jp.parse(response);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ListView yourListView = (ListView) getActivity().findViewById(R.id.messageListView);
-                            messageListViewAdapter customAdapter = new messageListViewAdapter(getActivity().getApplicationContext(), array);
-                            yourListView.setAdapter(customAdapter);
-                        }
-                    });
-                } catch (Exception e) {}
-            }
-        }).start();
+        ApiIntra.getMessages();
+        SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+        String response = prefs.getString("messages", null);
+        JsonParser jp = new JsonParser();
+        try {
+            final JsonArray array = (JsonArray) jp.parse(response);
+
+            ListView yourListView = (ListView) getActivity().findViewById(R.id.messageListView);
+            messageListViewAdapter customAdapter = new messageListViewAdapter(getActivity().getApplicationContext(), array);
+            yourListView.setAdapter(customAdapter);
+        } catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -199,18 +179,18 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+/**
+ * This interface must be implemented by activities that contain this
+ * fragment to allow an interaction in this fragment to be communicated
+ * to the activity and potentially other fragments contained in that
+ * activity.
+ * <p/>
+ * See the Android Training lesson <a href=
+ * "http://developer.android.com/training/basics/fragments/communicating.html"
+ * >Communicating with Other Fragments</a> for more information.
+ */
+public interface OnFragmentInteractionListener {
+    // TODO: Update argument type and name
+    void onFragmentInteraction(Uri uri);
+}
 }
