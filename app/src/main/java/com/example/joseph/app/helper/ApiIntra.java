@@ -148,11 +148,12 @@ public class ApiIntra {
      * "location":"FR/PAR" or another location in "FR/BDX","FR/LIL","FR/LYN","FR/MAR","FR/MPL","FR/NCY","FR/NAN","FR/NCE","FR/PAR","FR/REN","FR/STG","FR/TLS"
      * "course":"bachelor/classic" or "bachelor/tek1ed" or "bachelor/tek2ed"
      */
-    public static void getAllModules(String scolarYear, String location, String course) {
+    public static String getAllModules(String scolarYear, String location, String course) {
         String tmp = ApiManager.getApiCall("allmodules", "token", _token, "scolaryear", scolarYear, "location", location, "course", course);
         SharedPreferences.Editor editor = activity.getPreferences(activity.MODE_PRIVATE).edit();
         editor.putString("allModules", tmp);
         editor.commit();
+        return tmp;
     }
 
     /**
