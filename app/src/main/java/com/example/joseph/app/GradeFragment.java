@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -34,6 +35,8 @@ import org.json.JSONObject;
  * create an instance of this fragment.
  */
 public class GradeFragment extends Fragment {
+    private final String TAG = "GradeFragment";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -95,24 +98,33 @@ public class GradeFragment extends Fragment {
     }
 
     private void getAllMarks() {
-        try {
-            ApiIntra.getMarks();
-            SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-            String json = prefs.getString("marks", null);
-            JsonArray array = JsonGrabber.getArrayFromPath(json, "notes");
-
-            if (array == null)
-                return;
-            for (int i = 0; i < array.size(); i++) {
-                JsonObject object = array.get(i).getAsJsonObject();
-                if (object != null) {
-                    JsonElement title = object.get("title");
-                    ((TextView) (view.findViewById(R.id.title))).setText(title.getAsString());
+            final Handler handler = new Handler();
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        ApiIntra.getMarks();
+                        SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                        String json = prefs.getString("marks", null);
+                        final JsonArray array = JsonGrabber.getArrayFromPath(json, "notes");
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (array == null)
+                                    return;
+                                for (int i = 0; i < array.size(); i++) {
+                                    JsonObject object = array.get(i).getAsJsonObject();
+                                    if (object != null) {
+                                        JsonElement title = object.get("title");
+                                        ((TextView) (view.findViewById(R.id.title))).setText(title.getAsString());
+                                    }
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getMessage());
+                    }
                 }
-            }
-        } catch (Exception e) {
-            Log.e("GetAllMarks", e.getMessage());
-        }
+            }).start();
     }
 
 
