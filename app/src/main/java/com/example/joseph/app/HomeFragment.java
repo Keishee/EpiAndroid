@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.helper.ApiIntra;
+import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -102,7 +103,7 @@ public class HomeFragment extends Fragment {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            ImageView image = (ImageView)view.findViewById(R.id.photo_home);
+                            ImageView image = (ImageView) view.findViewById(R.id.photo_home);
                             image.setImageDrawable(d);
                         }
                     });
@@ -118,16 +119,18 @@ public class HomeFragment extends Fragment {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    String login = ((FrontPageActivity)getActivity()).getLogin();
+                    String login = ((FrontPageActivity) getActivity()).getLogin();
                     String response = ApiIntra.getUser(login);
-                    JsonParser jp = new JsonParser();
-                    JsonObject jresp = (JsonObject)jp.parse(response);
-                    JsonObject jo = (JsonObject)jresp.get("nsstat");
-                    final String hours = jo == null ? "0" : jo.get("active").getAsString();
+//                    JsonParser jp = new JsonParser();
+//                    JsonObject jresp = (JsonObject)jp.parse(response);
+//                    JsonObject jo = (JsonObject)jresp.get("nsstat");
+//                    final String hours = jo == null ? "0" : jo.get("active").getAsString();
+                    String hour = JsonGrabber.getVariableAndCast(response, "nsstat", "zoub");
+                    final String hours = hour == null ? "0" : hour;
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            TextView log = (TextView)view.findViewById(R.id.logTextView);
+                            TextView log = (TextView) view.findViewById(R.id.logTextView);
                             log.setText("Active time: " + hours + " hour(s)");
                         }
                     });
@@ -147,15 +150,17 @@ public class HomeFragment extends Fragment {
                 SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
                 String response = prefs.getString("messages", null);
                 JsonParser jp = new JsonParser();
-                final JsonArray array = (JsonArray)jp.parse(response);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ListView yourListView = (ListView) getActivity().findViewById(R.id.messageListView);
-                        messageListViewAdapter customAdapter = new messageListViewAdapter(getActivity().getApplicationContext(), array);
-                        yourListView .setAdapter(customAdapter);
-                    }
-                });
+                try {
+                    final JsonArray array = (JsonArray) jp.parse(response);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ListView yourListView = (ListView) getActivity().findViewById(R.id.messageListView);
+                            messageListViewAdapter customAdapter = new messageListViewAdapter(getActivity().getApplicationContext(), array);
+                            yourListView.setAdapter(customAdapter);
+                        }
+                    });
+                } catch (Exception e) {}
             }
         }).start();
     }
