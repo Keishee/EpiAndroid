@@ -6,26 +6,56 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/photo_home"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_margin="15dp"
-        android:minHeight="190dp"
-        android:minWidth="160dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/logTextView"
-        android:layout_gravity="center" />
-
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="226dp"
+        android:layout_height="295dp"
         android:id="@+id/messageListView"
         android:layout_gravity="center_horizontal|bottom" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left|top">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/photo_home"
+            android:layout_gravity="top|left|center_horizontal"
+            android:layout_margin="15dp"
+            android:minHeight="190dp"
+            android:minWidth="160dp"
+            android:background="#ebebeb" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/userName"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/logTextView"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/userGPA"
+                android:layout_marginTop="20dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </FrameLayout>
