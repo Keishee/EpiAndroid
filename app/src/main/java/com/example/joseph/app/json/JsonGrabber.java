@@ -25,7 +25,7 @@ public class JsonGrabber {
             if (elem.isJsonObject()) {
                 elem = ((JsonObject)elem).get(token);
             } else if (elem.isJsonArray()) {
-                JsonArray array = (JsonArray)elem.getAsJsonArray();
+                JsonArray array = elem.getAsJsonArray();
                 // todo: fct qui find le token dans un array
             } else {
                 return (T)elem.getAsString();
@@ -42,4 +42,24 @@ public class JsonGrabber {
         return (T)elem.getAsString();
     }
 
+    public static JsonArray getArrayFromPath(String response, String... args) {
+        JsonParser parser = new JsonParser();
+        if (response.isEmpty())
+            return null;
+
+        JsonElement elem = parser.parse(response);
+        for (String token : args) {
+            if (elem == null)
+                break;
+            if (elem.isJsonObject()) {
+                elem = ((JsonObject) elem).get(token);
+            } else if (elem.isJsonArray()) {
+                JsonArray array = elem.getAsJsonArray();
+                if (token == args[args.length - 1])
+                    return array;
+                // todo: appel fct Alex
+            }
+        }
+        return null;
+    }
 }
