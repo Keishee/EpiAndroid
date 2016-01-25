@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.joseph.app.helper.ApiIntra;
+import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -98,16 +99,17 @@ public class GradeFragment extends Fragment {
             ApiIntra.getMarks();
             SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
             String json = prefs.getString("marks", null);
+            JsonArray array = JsonGrabber.getArrayFromPath(json, "notes");
 
-            JsonParser parser = new JsonParser();
-            JsonObject marks = (JsonObject)parser.parse(json);
-
-            JsonArray array = marks.getAsJsonArray("notes");
+            if (array == null)
+                return;
             for (int i = 0; i < array.size(); i++)
             {
-                JsonElement title =  array.get(i).getAsJsonObject().get("title");
-                ((TextView)(view.findViewById(R.id.title))).setText(title.getAsString());
-            }} catch (Exception e) {
+                JsonObject object = array.get(i).getAsJsonObject();
+                if (object != null) {
+                    JsonElement title = object.get("title");
+                    ((TextView) (view.findViewById(R.id.title))).setText(title.getAsString());
+                }}} catch (Exception e) {
                 Log.e("GetAllMarks", e.getMessage());
         }
     }
@@ -115,7 +117,7 @@ public class GradeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        getAllMarks();
+        getAllMarks();
     }
 
 
