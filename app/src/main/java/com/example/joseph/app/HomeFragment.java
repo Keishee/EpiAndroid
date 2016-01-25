@@ -81,6 +81,7 @@ public class HomeFragment extends Fragment {
 
     private void getUserImageAndShow() {
         try {
+            final Handler handler = new Handler();
             ApiIntra.getPhoto(((FrontPageActivity) getActivity()).getLogin());
             SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
             String url = prefs.getString("photo", null);
@@ -88,14 +89,27 @@ public class HomeFragment extends Fragment {
             JsonObject jo = (JsonObject) jp.parse(url);
             JsonElement je = jo.get("url");
             url = je.getAsString();
-            InputStream is = new URL(url).openStream();
-            final Drawable d = Drawable.createFromStream(is, "picture");
-
-            ImageView image = (ImageView) view.findViewById(R.id.photo_home);
-            image.setImageDrawable(d);
+            final String url2 = url;
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        InputStream is = new URL(url2).openStream();
+                        final Drawable d = Drawable.createFromStream(is, "picture");
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ImageView image = (ImageView) view.findViewById(R.id.photo_home);
+                                image.setImageDrawable(d);
+                            }
+                        });
+                    } catch (Exception e) {
+                        Log.e("getUserImageAndShow", e.getMessage());
+                    }
+                }
+            }).start();
 
         } catch (Exception e) {
-            Log.e("ImageView", e.getMessage());
+            Log.e("getUserImageAndShow", e.getMessage());
         }
 
     }
@@ -179,18 +193,18 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
-/**
- * This interface must be implemented by activities that contain this
- * fragment to allow an interaction in this fragment to be communicated
- * to the activity and potentially other fragments contained in that
- * activity.
- * <p/>
- * See the Android Training lesson <a href=
- * "http://developer.android.com/training/basics/fragments/communicating.html"
- * >Communicating with Other Fragments</a> for more information.
- */
-public interface OnFragmentInteractionListener {
-    // TODO: Update argument type and name
-    void onFragmentInteraction(Uri uri);
-}
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
 }
