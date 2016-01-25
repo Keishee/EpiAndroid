@@ -5,9 +5,23 @@
     tools:context="com.example.joseph.app.GradeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/title"/>
 
+    <ListView
+        android:layout_width="190dp"
+        android:layout_height="300dp"
+        android:id="@+id/SemestreListView"
+        android:layout_gravity="left|top"
+        android:choiceMode="multipleChoice" />
+
+    <ListView
+        android:layout_width="190dp"
+        android:layout_height="300dp"
+        android:id="@+id/ModuleListView"
+        android:layout_gravity="right|top" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="198dp"
+        android:id="@+id/MarksListView"
+        android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>

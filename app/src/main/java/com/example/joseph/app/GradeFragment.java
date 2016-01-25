@@ -1,10 +1,10 @@
 package com.example.joseph.app;
 
+import com.example.joseph.app.adapter.markListViewAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.Preference;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.joseph.app.helper.ApiIntra;
@@ -24,6 +25,8 @@ import com.google.gson.JsonArray;
 //import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.logging.Handler;
 
 
 /**
@@ -98,33 +101,32 @@ public class GradeFragment extends Fragment {
     }
 
     private void getAllMarks() {
-            final Handler handler = new Handler();
-            new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        ApiIntra.getMarks();
-                        SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-                        String json = prefs.getString("marks", null);
-                        final JsonArray array = JsonGrabber.getArrayFromPath(json, "notes");
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (array == null)
-                                    return;
-                                for (int i = 0; i < array.size(); i++) {
-                                    JsonObject object = array.get(i).getAsJsonObject();
-                                    if (object != null) {
-                                        JsonElement title = object.get("title");
-                                        ((TextView) (view.findViewById(R.id.title))).setText(title.getAsString());
-                                    }
-                                }
-                            }
-                        });
-                    } catch (Exception e) {
-                        Log.e(TAG, e.getMessage());
-                    }
+        final android.os.Handler handler = new android.os.Handler();
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    ApiIntra.getMarks();
+                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                    String json = prefs.getString("marks", null);
+                    final JsonArray array = JsonGrabber.getArrayFromPath(json, "notes");
+
+                    if (array == null)
+                        return;
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            ListView yourListView = (ListView) getActivity().findViewById(R.id.MarksListView);
+                            markListViewAdapter customAdapter = new markListViewAdapter(getActivity().getApplicationContext(), array);
+                            yourListView.setAdapter(customAdapter);
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
                 }
-            }).start();
+            }
+        }).start();
     }
 
 
