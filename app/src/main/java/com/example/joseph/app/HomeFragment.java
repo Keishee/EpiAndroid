@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
 //                    JsonObject jresp = (JsonObject)jp.parse(response);
 //                    JsonObject jo = (JsonObject)jresp.get("nsstat");
 //                    final String hours = jo == null ? "0" : jo.get("active").getAsString();
-                    String hour = JsonGrabber.getVariableAndCast(response, "nsstat", "zoub");
+                    String hour = JsonGrabber.getVariableAndCast(response, "nsstat", "active");
                     final String hours = hour == null ? "0" : hour;
                     handler.post(new Runnable() {
                         @Override
@@ -143,7 +143,6 @@ public class HomeFragment extends Fragment {
 
     private void getLastMessagesAndShow() {
         final Handler handler = new Handler();
-//        final ListView messages = (ListView)view.findViewById(R.id.logTextView);
         new Thread(new Runnable() {
             public void run() {
                 ApiIntra.getMessages();
