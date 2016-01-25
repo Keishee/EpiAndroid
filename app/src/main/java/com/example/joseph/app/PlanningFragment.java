@@ -146,9 +146,14 @@ public class PlanningFragment extends Fragment {
                         String start = obj.get("start").getAsString();
                         String end = obj.get("end").getAsString();
                         String module = obj.get("titlemodule").getAsString();
-                        planningInfos.add(new PlanningInfo(title, module, csemester, room, start, end));
+
+//                        JsonElement relem = obj.get("event_registered");
+//                        String registerString = relem.getAsString();
+//                        boolean registered = registerString.equals("registered");
+                        planningInfos.add(new PlanningInfo(title, module, csemester, room, start, end, false));
                     }
                 }
+                // TODO: order planningInfos
                 handler.post(new Runnable() {
                     @Override
                     public void run() {

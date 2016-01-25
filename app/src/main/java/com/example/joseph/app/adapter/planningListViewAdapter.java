@@ -35,11 +35,13 @@ public class planningListViewAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.custom_planning_row, null);
 
         PlanningInfo pi = planningInfos.get(position);
-        ((TextView) vi.findViewById(R.id.planningModule)).setText(pi.getModule());
-        ((TextView) vi.findViewById(R.id.planningCourse)).setText(pi.getTitle());
+        ((TextView) vi.findViewById(R.id.planningModule)).setText(pi.getTitle());
+        ((TextView) vi.findViewById(R.id.planningCourse)).setText(pi.getModule());
         ((TextView) vi.findViewById(R.id.planningStart)).setText(pi.getStart());
         ((TextView) vi.findViewById(R.id.planningEnd)).setText(pi.getEnd());
 
+        if (pi.isRegistered())
+            ((TextView) vi.findViewById(R.id.planningModule)).setTextColor(0xff4c946b);
         return vi;
     }
 

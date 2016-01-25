@@ -10,14 +10,21 @@ public class PlanningInfo {
     public String room;
     public String start;
     public String end;
+    boolean registered;
 
-    public PlanningInfo(String title, String module, int semester, String room, String start, String end) {
+    // Todo: stock start/end as Date?
+    public PlanningInfo(String title, String module, int semester, String room, String start, String end, boolean registered) {
         this.title = title;
         this.module = module;
         this.semester = semester;
         this.room = room;
         this.start = start;
         this.end = end;
+        this.registered = registered;
+    }
+
+    public boolean isRegistered() {
+        return registered;
     }
 
     public String getRoom(String fullRoom) {
