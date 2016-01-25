@@ -1,14 +1,6 @@
 package com.example.joseph.app.helper;
 
-import android.content.SharedPreferences;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.ListView;
-
-import com.example.joseph.app.R;
-import com.example.joseph.app.adapter.messageListViewAdapter;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
