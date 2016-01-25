@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void run() {
                             TextView log = (TextView) view.findViewById(R.id.logTextView);
-                            log.setText("Active time: " + hours + " hour(s)");
+                            log.setText("Log: " + hours + " hour(s)");
                             ((TextView)view.findViewById(R.id.userName)).setText(goodName);
                             ((TextView)view.findViewById(R.id.userGPA)).setText("GPA: " + goodGPA);
                         }
