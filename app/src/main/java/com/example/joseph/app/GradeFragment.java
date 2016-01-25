@@ -42,7 +42,7 @@ public class GradeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private View view;
+    private View   view;
 
     private OnFragmentInteractionListener mListener;
 
@@ -95,24 +95,27 @@ public class GradeFragment extends Fragment {
     }
 
     private void getAllMarks() {
-        try {
-            ApiIntra.getMarks();
-            SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-            String json = prefs.getString("marks", null);
-            JsonArray array = JsonGrabber.getArrayFromPath(json, "notes");
+        new Thread(new Runnable() {
+            public void run() {
+                  try {
+                        ApiIntra.getMarks();
+                        SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                        String json = prefs.getString("marks", null);
+                        JsonArray array = JsonGrabber.getArrayFromPath(json, "notes");
 
-            if (array == null)
-                return;
-            for (int i = 0; i < array.size(); i++) {
-                JsonObject object = array.get(i).getAsJsonObject();
-                if (object != null) {
-                    JsonElement title = object.get("title");
-                    ((TextView) (view.findViewById(R.id.title))).setText(title.getAsString());
-                }
+                        if (array == null)
+                            return;
+                        for (int i = 0; i < array.size(); i++)
+                        {
+                            JsonObject object = array.get(i).getAsJsonObject();
+                            if (object != null) {
+                                JsonElement title = object.get("title");
+                                ((TextView) (view.findViewById(R.id.title))).setText(title.getAsString());
+                            }}} catch (Exception e) {
+                            Log.e("GetAllMarks", e.getMessage());
+                            }
             }
-        } catch (Exception e) {
-            Log.e("GetAllMarks", e.getMessage());
-        }
+        }).start();
     }
 
     @Override

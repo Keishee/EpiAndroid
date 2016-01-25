@@ -2,8 +2,6 @@ package com.example.joseph.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,23 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.json.JsonGrabber;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.json.JSONObject;
-
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 
@@ -114,24 +107,26 @@ public class HomeFragment extends Fragment {
         }).start();
     }
 
-    private void getUserLogTimeAndShow() {
+    private void getUserInfosAndShow() {
         final Handler handler = new Handler();
         new Thread(new Runnable() {
             public void run() {
                 try {
                     String login = ((FrontPageActivity) getActivity()).getLogin();
                     String response = ApiIntra.getUser(login);
-//                    JsonParser jp = new JsonParser();
-//                    JsonObject jresp = (JsonObject)jp.parse(response);
-//                    JsonObject jo = (JsonObject)jresp.get("nsstat");
-//                    final String hours = jo == null ? "0" : jo.get("active").getAsString();
                     String hour = JsonGrabber.getVariableAndCast(response, "nsstat", "active");
                     final String hours = hour == null ? "0" : hour;
+                    String name = JsonGrabber.getVariableAndCast(response, "title");
+                    final String goodName = name == null ? "Leeroy Jenkins" : name;
+                    String gpa = JsonGrabber.getVariableAndCast(response, "gpa", "gpa");
+                    final String goodGPA = gpa == null ? "0" : gpa;
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
                             TextView log = (TextView) view.findViewById(R.id.logTextView);
-                            log.setText("Active time: " + hours + " hour(s)");
+                            log.setText("Log: " + hours + " hour(s)");
+                            ((TextView)view.findViewById(R.id.userName)).setText(goodName);
+                            ((TextView)view.findViewById(R.id.userGPA)).setText("GPA: " + goodGPA);
                         }
                     });
                 } catch (Exception e) {
@@ -168,7 +163,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         getUserImageAndShow();
-        getUserLogTimeAndShow();
+        getUserInfosAndShow();
         getLastMessagesAndShow();
     }
 
