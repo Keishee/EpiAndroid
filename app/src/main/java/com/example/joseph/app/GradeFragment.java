@@ -1,6 +1,7 @@
 package com.example.joseph.app;
 
 import com.example.joseph.app.adapter.markListViewAdapter;
+import com.example.joseph.app.adapter.semesterListViewAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.joseph.app.adapter.moduleListViewAdapter;
+import com.example.joseph.app.helper.ActiveUser;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonElement;
@@ -27,6 +29,7 @@ import com.google.gson.JsonArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.logging.Handler;
 
 
@@ -106,8 +109,9 @@ public class GradeFragment extends Fragment {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    ApiIntra.getMarks();
                     SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+
+                    ApiIntra.getMarks();
                     String MarksJson = prefs.getString("marks", null);
                     final JsonArray MarksArray = JsonGrabber.getArrayFromPath(MarksJson, "notes");
 
@@ -118,19 +122,30 @@ public class GradeFragment extends Fragment {
                     if (MarksArray == null || ModulesArray == null)
                         return;
 
+                    final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+
+                    final ArrayList<String> semester = new ArrayList<String>();;
+
+                    for (int i = 0; i < user.getSemester(); i++) {
+                        semester.add(i, "Semester " + Integer.toString(i + 1));
+                    }
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
 
                             // TODO afficher par rapport au semestre et a la matière.
-                            ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
-                            markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArray);
-                            MarksListView.setAdapter(MarkscustomAdapter);
+                            ListView SemesterListView = (ListView)getActivity().findViewById(R.id.SemestreListView);
+                            semesterListViewAdapter SemesterCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), semester);
+                            SemesterListView.setAdapter(SemesterCustomAdapter);
 
                             ListView ModuleListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
                             moduleListViewAdapter ModuleCustomAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), ModulesArray);
                             ModuleListView.setAdapter(ModuleCustomAdapter);
 
+                            ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
+                            markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArray);
+                            MarksListView.setAdapter(MarkscustomAdapter);
                         }
                     });
                 } catch (Exception e) {
@@ -138,6 +153,10 @@ public class GradeFragment extends Fragment {
                 }
             }
         }).start();
+    }
+
+    private JsonArray sortBySemester(JsonArray array, String semester) {
+
     }
 
 
