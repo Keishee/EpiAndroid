@@ -51,13 +51,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -207,13 +200,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return true;
+        return !email.isEmpty();
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return true;
+        return !password.isEmpty();
     }
 
     /**
@@ -326,55 +317,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-//            try {
-//                //Network access.
-//                URL url = new URL("https://epitech-api.herokuapp.com/login");
-//                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-//                conn.setRequestMethod("POST");
-//                conn.setDoInput(true);
-//                conn.setDoOutput(true);
-//                Log.i("loginActivity", "step 2");
-//                String urlParameters =
-//                        "login=" + URLEncoder.encode(mEmail, "UTF-8") +
-//                                "&password=" + URLEncoder.encode(mPassword, "UTF-8");
-//
-//                DataOutputStream wr = new DataOutputStream (
-//                        conn.getOutputStream ());
-//                wr.writeBytes(urlParameters);
-//                wr.flush();
-//                wr.close();
-//                //Get Response
-//                InputStream is = conn.getInputStream();
-//                BufferedReader rd = new BufferedReader(new InputStreamReader(is, "utf-8"));
-//                String line;
-//                StringBuffer response = new StringBuffer();
-//                while((line = rd.readLine()) != null) {
-//                    response.append(line);
-//                    response.append("\n");
-//                }
-//                rd.close();
-//                Log.i(TAG, "response : " + response.toString());
-//
-//            } catch (Exception e) {
-//                Log.e(TAG, e.getMessage());
-//                return false;
-//            }
             ApiIntra.postToken(mEmail, mPassword);
-            //String ret = ApiManager.postApiCall("login", "login", mEmail, "password", mPassword);
-            //Log.i(TAG, "response : " + ret);
-
-//            try { // TODO: remove that
-//                JsonParser parser = new JsonParser();
-//                JsonObject object = (JsonObject)parser.parse(ret);
-////                JsonArray token = (JsonArray) parser.parse(ret);
-////                JsonElement element = object.get("token");
-//
-////                JsonObject object = wtf.getAsJsonObject();
-//                Log.i(TAG + "OMGWTF", object.get("token").getAsString());
-//            } catch (Exception e) {
-//                Log.e(TAG, e.getMessage());
-//            }
-            return true;
+            return ApiIntra.get_token() != null;
         }
 
         @Override
