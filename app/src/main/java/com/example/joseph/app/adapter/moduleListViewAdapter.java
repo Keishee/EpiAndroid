@@ -20,18 +20,20 @@ public class moduleListViewAdapter extends BaseAdapter {
     private JsonArray jArray;
     private LayoutInflater inflater;
 
-    public moduleListViewAdapter(Context _context, JsonArray array) {
+    public moduleListViewAdapter(Context _context, JsonArray array, Boolean registered) {
         jArray = array;
         inflater = (LayoutInflater) _context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        JsonArray tmp = new JsonArray();
-        for (JsonElement obj : jArray) {
-            JsonObject obj2 = obj.getAsJsonObject();
-            if (obj2.get("status").getAsString().equals("ongoing")) {
-                tmp.add(obj);
+        if (registered) {
+            JsonArray tmp = new JsonArray();
+            for (JsonElement obj : jArray) {
+                JsonObject obj2 = obj.getAsJsonObject();
+                if (obj2.get("status").getAsString().equals("ongoing")) {
+                    tmp.add(obj);
+                }
             }
+            jArray = tmp;
         }
-        jArray = tmp;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class moduleListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         if (vi == null)
-            vi = inflater.inflate(R.layout.custom_module_row, null);
+            vi = inflater.inflate(R.layout.custom_module_row, parent, false);
 
         JsonObject obj = (JsonObject) jArray.get(position);
         String tmp = obj.get("status").getAsString();

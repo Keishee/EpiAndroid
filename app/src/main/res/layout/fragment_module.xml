@@ -8,7 +8,14 @@
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="453dp"
         android:id="@+id/moduleListView"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_gravity="center_horizontal|bottom" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/moduleSwitch"
+        android:layout_gravity="left|top"
+        android:text="@string/toggle_registered_text" />
 </FrameLayout>
