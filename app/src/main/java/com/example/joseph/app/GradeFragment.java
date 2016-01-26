@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,6 +44,8 @@ import java.util.logging.Handler;
  */
 public class GradeFragment extends Fragment {
     private final String TAG = "GradeFragment";
+    private String currentSemester = "1";
+    private ArrayList<String> ModulesArrays = null;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -123,12 +126,28 @@ public class GradeFragment extends Fragment {
                         return;
 
                     final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+                    final ArrayList<String> semester = new ArrayList<String>();
 
-                    final ArrayList<String> semester = new ArrayList<String>();;
-
-                    for (int i = 0; i < user.getSemester(); i++) {
-                        semester.add(i, "Semester " + Integer.toString(i + 1));
+                    for (int i = 0; i <= user.getSemester(); i++) {
+                        semester.add(i, "Semester " + Integer.toString(i));
                     }
+
+                    ModulesArrays = sortModuleBySemester(ModulesArray, currentSemester);
+
+                    final ListView lv = (ListView) getActivity().findViewById(R.id.SemestreListView);
+                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
+                            currentSemester = Integer.toString(myItemInt);
+                            ModulesArrays = sortModuleBySemester(ModulesArray, currentSemester);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ListView ModuleListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
+                                    semesterListViewAdapter ModuleCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), ModulesArrays);
+                                    ModuleListView.setAdapter(ModuleCustomAdapter);
+                                }
+                            });
+                                }});
 
                     handler.post(new Runnable() {
                         @Override
@@ -140,7 +159,7 @@ public class GradeFragment extends Fragment {
                             SemesterListView.setAdapter(SemesterCustomAdapter);
 
                             ListView ModuleListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
-                            moduleListViewAdapter ModuleCustomAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), ModulesArray);
+                            semesterListViewAdapter ModuleCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), ModulesArrays);
                             ModuleListView.setAdapter(ModuleCustomAdapter);
 
                             ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
@@ -149,15 +168,24 @@ public class GradeFragment extends Fragment {
                         }
                     });
                 } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
+                    Log.e(TAG, "Error: " + e.getMessage());
                 }
             }
         }).start();
     }
 
-    private JsonArray sortBySemester(JsonArray array, String semester) {
-        JsonArray sorted;
-        return null;
+    private ArrayList<String> sortModuleBySemester(JsonArray array, String semester) {
+        final ArrayList<String> sorted = new ArrayList<String>();
+        for (int i = 0; i < array.size(); i++){
+            String tmp;
+            JsonObject obj = (JsonObject)array.get(i);
+            if (obj != null) {
+                tmp = obj.get("semester").getAsString();
+                if (tmp == semester)
+                    sorted.add(obj.get("title").getAsString());
+            }
+        }
+        return sorted;
     }
 
 
