@@ -60,7 +60,6 @@ public class PlanningFragment extends Fragment {
      *
      * @return A new instance of fragment PlanningFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static PlanningFragment newInstance() {
         PlanningFragment fragment = new PlanningFragment();
         Bundle args = new Bundle();
@@ -80,12 +79,6 @@ public class PlanningFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_planning, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -118,7 +111,7 @@ public class PlanningFragment extends Fragment {
                 Date cDate = new Date();
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
                 Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.DATE, +7);
+                cal.add(Calendar.DATE, +14);
                 String datePlusWeek =  new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 
                 ApiIntra.getPlanning(date, datePlusWeek);
@@ -165,24 +158,26 @@ public class PlanningFragment extends Fragment {
         try {
             getWeeklySemesterCoursesAndShow();
             Switch rSwitch = (Switch)getView().findViewById(R.id.registerSwitch);
-            rSwitch.setOnCheckedChangeListener((new CompoundButton.OnCheckedChangeListener() {
+            rSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    ListView yourListView = (ListView) getActivity().findViewById(R.id.planningListView);
-                    planningListViewAdapter adapter = (planningListViewAdapter)yourListView.getAdapter();
-                    if (isChecked) {
-                        ArrayList<PlanningInfo> onlyRegistered = new ArrayList<>();
-                        for (PlanningInfo pi : planningInfos) {
-                            if (pi.isRegistered())
-                                onlyRegistered.add(pi);
+                    if (planningInfos != null) {
+                        ListView yourListView = (ListView) getActivity().findViewById(R.id.planningListView);
+                        planningListViewAdapter adapter = (planningListViewAdapter) yourListView.getAdapter();
+                        if (isChecked) {
+                            ArrayList<PlanningInfo> onlyRegistered = new ArrayList<>();
+                            for (PlanningInfo pi : planningInfos) {
+                                if (pi.isRegistered())
+                                    onlyRegistered.add(pi);
+                            }
+                            adapter.setPlanningInfos(onlyRegistered);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            adapter.setPlanningInfos(planningInfos);
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.setPlanningInfos(onlyRegistered);
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        adapter.setPlanningInfos(planningInfos);
-                        adapter.notifyDataSetChanged();
                     }
                 }
-            }));
+            });
         } catch (Exception e) {
             Log.e(TAG, "Error: " + e.getMessage());
         }
@@ -205,7 +200,6 @@ public class PlanningFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

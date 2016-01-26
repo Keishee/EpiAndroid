@@ -54,8 +54,6 @@ public class planningListViewAdapter extends BaseAdapter {
             ((TextView) vi.findViewById(R.id.planningEnd)).setText(format.format(end));
         } catch (Exception e) {}
 
-        if (pi.isRegistered())
-            ((TextView) vi.findViewById(R.id.planningModule)).setTextColor(0xff4c946b);
         return vi;
     }
 

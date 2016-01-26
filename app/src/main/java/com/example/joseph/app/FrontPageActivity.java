@@ -121,7 +121,6 @@ public class FrontPageActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        // TODO: Savoir a quoi ca sert ty
     }
 
     //Handle fragment change
