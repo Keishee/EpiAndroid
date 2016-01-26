@@ -22,7 +22,7 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="198dp"
+        android:layout_height="195dp"
         android:id="@+id/MarksListView"
         android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>
