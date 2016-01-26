@@ -10,7 +10,10 @@ import com.example.joseph.app.R;
 import com.example.joseph.app.helper.PlanningInfo;
 import com.google.gson.JsonArray;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.view.LayoutInflater;
 import android.widget.TextView;
@@ -37,8 +40,15 @@ public class planningListViewAdapter extends BaseAdapter {
         PlanningInfo pi = planningInfos.get(position);
         ((TextView) vi.findViewById(R.id.planningModule)).setText(pi.getTitle());
         ((TextView) vi.findViewById(R.id.planningCourse)).setText(pi.getModule());
-        ((TextView) vi.findViewById(R.id.planningStart)).setText(pi.getStart());
-        ((TextView) vi.findViewById(R.id.planningEnd)).setText(pi.getEnd());
+        ((TextView) vi.findViewById(R.id.planningRoom)).setText(pi.getRoom());
+
+        try {
+            Date start = pi.getStartDate();
+            Date end = pi.getEndDate();
+            DateFormat format = new SimpleDateFormat("d\tMMMM\tHH:mm");
+            ((TextView) vi.findViewById(R.id.planningStart)).setText(format.format(start));
+            ((TextView) vi.findViewById(R.id.planningEnd)).setText(format.format(end));
+        } catch (Exception e) {}
 
         if (pi.isRegistered())
             ((TextView) vi.findViewById(R.id.planningModule)).setTextColor(0xff4c946b);

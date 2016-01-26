@@ -7,7 +7,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ListView
-        android:layout_width="190dp"
+        android:layout_width="133dp"
         android:layout_height="300dp"
         android:id="@+id/SemestreListView"
         android:layout_gravity="left|top"
@@ -22,7 +22,7 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="198dp"
+        android:layout_height="195dp"
         android:id="@+id/MarksListView"
         android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>
