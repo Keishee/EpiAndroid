@@ -1,6 +1,7 @@
 package com.example.joseph.app.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.joseph.app.R;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 /**
@@ -22,6 +24,14 @@ public class moduleListViewAdapter extends BaseAdapter {
         jArray = array;
         inflater = (LayoutInflater) _context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        JsonArray tmp = new JsonArray();
+        for (JsonElement obj : jArray) {
+            JsonObject obj2 = obj.getAsJsonObject();
+            if (obj2.get("status").getAsString().equals("ongoing")) {
+                tmp.add(obj);
+            }
+        }
+        jArray = tmp;
     }
 
     @Override
@@ -36,10 +46,12 @@ public class moduleListViewAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.custom_module_row, null);
 
         JsonObject obj = (JsonObject) jArray.get(position);
+        String tmp = obj.get("status").getAsString();
+        Log.i("moduleAdapter", tmp);
+
         String title = obj.get("title").getAsString();
 
         ((TextView) vi.findViewById(R.id.moduleTitle)).setText(title);
-
         return vi;
     }
 
