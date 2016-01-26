@@ -18,6 +18,14 @@ public class PlanningInfo {
     private Date startDate;
     private Date endDate;
     boolean registered;
+    boolean allowToken;
+
+    // requested by token POST
+    private String scolaryear;
+    private String codemodule;
+    private String codeinstance;
+    private String codeacti;
+    private String codeevent;
 
     public PlanningInfo(String title, String module, int semester, String room, String start, String end, boolean registered) {
         this.title = title;
@@ -32,6 +40,39 @@ public class PlanningInfo {
         startDate = simpledateformat.parse(start, pos);
         pos.setIndex(0);
         endDate = simpledateformat.parse(end, pos);
+    }
+
+    public void addTokenRequestedInfos(String scolaryear, String codemodule, String codeinstance, String codeacti, String codeevent, boolean allowToken) {
+        this.scolaryear = scolaryear;
+        this.codemodule = codemodule;
+        this.codeinstance = codeinstance;
+        this.codeacti = codeacti;
+        this.codeevent = codeevent;
+        this.allowToken = allowToken;
+    }
+
+    public boolean allowToken() {
+        return allowToken;
+    }
+
+    public String getScolaryear() {
+        return scolaryear;
+    }
+
+    public String getCodemodule() {
+        return codemodule;
+    }
+
+    public String getCodeinstance() {
+        return codeinstance;
+    }
+
+    public String getCodeacti() {
+        return codeacti;
+    }
+
+    public String getCodeevent() {
+        return codeevent;
     }
 
     public String getRoom() {

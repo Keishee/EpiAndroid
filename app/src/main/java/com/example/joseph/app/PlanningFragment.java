@@ -108,8 +108,9 @@ public class PlanningFragment extends Fragment {
                     semester = getUserSemester();
                     user.setSemester(semester);
                 }
-                Date cDate = new Date();
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
+                Calendar cal1 = Calendar.getInstance();
+                cal1.add(Calendar.DATE, -1);
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(cal1.getTime());
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.DATE, +14);
                 String datePlusWeek =  new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
@@ -130,9 +131,17 @@ public class PlanningFragment extends Fragment {
                         String start = obj.get("start").getAsString();
                         String end = obj.get("end").getAsString();
                         String module = obj.get("titlemodule").getAsString();
-
                         String eventRegistered = obj.get("event_registered").getAsString();
-                        planningInfos.add(new PlanningInfo(title, module, csemester, room, start, end, eventRegistered.equals("registered")));
+
+                        PlanningInfo pi = new PlanningInfo(title, module, csemester, room, start, end, eventRegistered.equals("registered"));
+                        String scolaryear = obj.get("scolaryear").getAsString();
+                        String codemodule = obj.get("codemodule").getAsString();
+                        String codeinstance = obj.get("codeinstance").getAsString();
+                        String codeacti = obj.get("codeacti").getAsString();
+                        String codeevent = obj.get("codeevent").getAsString();
+                        boolean allowToken = obj.get("allow_token").getAsBoolean();
+                        pi.addTokenRequestedInfos(scolaryear, codemodule, codeinstance, codeacti, codeevent, allowToken);
+                        planningInfos.add(pi);
                     }
                 }
                 Collections.sort(planningInfos, new Comparator<PlanningInfo>() {
@@ -169,10 +178,10 @@ public class PlanningFragment extends Fragment {
                                 if (pi.isRegistered())
                                     onlyRegistered.add(pi);
                             }
-                            adapter.setPlanningInfos(onlyRegistered);
+                            adapter.setPlanningInfos(onlyRegistered, true);
                             adapter.notifyDataSetChanged();
                         } else {
-                            adapter.setPlanningInfos(planningInfos);
+                            adapter.setPlanningInfos(planningInfos, false);
                             adapter.notifyDataSetChanged();
                         }
                     }
