@@ -1,5 +1,6 @@
 package com.example.joseph.app.adapter;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.joseph.app.FrontPageActivity;
 import com.example.joseph.app.R;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -25,6 +27,7 @@ public class markListViewAdapter extends BaseAdapter {
 
     private JsonArray jArray;
     private LayoutInflater inflater;
+    private String user;
 
     public markListViewAdapter(Context _context, JsonArray array) {
         jArray = array;

@@ -108,14 +108,14 @@ public class GradeFragment extends Fragment {
                 try {
                     ApiIntra.getMarks();
                     SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-                    String json = prefs.getString("marks", null);
-                    final JsonArray array = JsonGrabber.getArrayFromPath(json, "notes");
+                    String MarksJson = prefs.getString("marks", null);
+                    final JsonArray MarksArray = JsonGrabber.getArrayFromPath(MarksJson, "notes");
 
                     ApiIntra.getModules();
-                    String mjson = prefs.getString("modules", null);
-                    final JsonArray marray = JsonGrabber.getArrayFromPath(mjson, "modules");
+                    String ModuleJson = prefs.getString("modules", null);
+                    final JsonArray ModulesArray = JsonGrabber.getArrayFromPath(ModuleJson, "modules");
 
-                    if (array == null || marray == null)
+                    if (MarksArray == null || ModulesArray == null)
                         return;
 
                     handler.post(new Runnable() {
@@ -123,13 +123,13 @@ public class GradeFragment extends Fragment {
                         public void run() {
 
                             // TODO afficher par rapport au semestre et a la matière.
-                            ListView yourListView = (ListView) getActivity().findViewById(R.id.MarksListView);
-                            markListViewAdapter customAdapter = new markListViewAdapter(getActivity().getApplicationContext(), array);
-                            yourListView.setAdapter(customAdapter);
+                            ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
+                            markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArray);
+                            MarksListView.setAdapter(MarkscustomAdapter);
 
-                            ListView myourListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
-                            moduleListViewAdapter mcustomAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), marray);
-                            myourListView.setAdapter(mcustomAdapter);
+                            ListView ModuleListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
+                            moduleListViewAdapter ModuleCustomAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), ModulesArray);
+                            ModuleListView.setAdapter(ModuleCustomAdapter);
 
                         }
                     });
