@@ -45,7 +45,7 @@ public class moduleListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
         if (vi == null)
-            vi = inflater.inflate(R.layout.custom_module_row, null);
+            vi = inflater.inflate(R.layout.custom_module_row, parent, false);
 
         JsonObject obj = (JsonObject) jArray.get(position);
         String tmp = obj.get("status").getAsString();
