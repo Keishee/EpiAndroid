@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.joseph.app.adapter.messageListViewAdapter;
+import com.example.joseph.app.adapter.moduleListViewAdapter;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonArray;
@@ -139,7 +140,7 @@ public class ModuleFragment extends Fragment {
                         @Override
                         public void run() {
                             ListView yourListView = (ListView) getActivity().findViewById(R.id.moduleListView);
-                            messageListViewAdapter customAdapter = new messageListViewAdapter(getActivity().getApplicationContext(), array);
+                            moduleListViewAdapter customAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), array);
                             yourListView.setAdapter(customAdapter);
                         }
                     });

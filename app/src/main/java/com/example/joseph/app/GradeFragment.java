@@ -156,7 +156,7 @@ public class GradeFragment extends Fragment {
     }
 
     private JsonArray sortBySemester(JsonArray array, String semester) {
-
+        return null;
     }
 
 
