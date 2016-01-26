@@ -29,7 +29,9 @@ public class semesterListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return jArray.size();
+        if (jArray != null)
+            return jArray.size();
+        return 0;
     }
 
     @Override

@@ -14,29 +14,34 @@ import android.widget.TextView;
 
 import com.example.joseph.app.FrontPageActivity;
 import com.example.joseph.app.R;
+import com.example.joseph.app.helper.MarkInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+
 /**
  * Created by Alex on 25/01/2016.
  */
 public class markListViewAdapter extends BaseAdapter {
 
-    private JsonArray jArray;
+    private ArrayList<MarkInfo> jArray;
     private LayoutInflater inflater;
     private String user;
 
-    public markListViewAdapter(Context _context, JsonArray array) {
+    public markListViewAdapter(Context _context, ArrayList<MarkInfo> array) {
         jArray = array;
         inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return jArray.size();
+        if (jArray != null)
+            return jArray.size();
+        return 0;
     }
 
     @Override
@@ -45,13 +50,12 @@ public class markListViewAdapter extends BaseAdapter {
         if (vi == null)
             vi = inflater.inflate(R.layout.custom_message_row_grade_marks, null);
 
-        JsonObject obj = (JsonObject) jArray.get(position);
-        if (obj != null) {
+        if (jArray != null) {
             try {
-                String title = obj.get("title").getAsString();
-                String comment = obj.get("comment").getAsString();
-                String mark = obj.get("final_note").getAsString();
-                String correcteur = obj.get("correcteur").getAsString();
+                String title = jArray.get(position).getTitle();
+                String comment = jArray.get(position).getComment();
+                String mark = jArray.get(position).getMarks();
+                String correcteur = jArray.get(position).getCorrector();
                 ((TextView) vi.findViewById(R.id.TitleMark)).setText(title);
                 ((TextView) vi.findViewById(R.id.MarkMark)).setText(mark);
                 ((TextView) vi.findViewById(R.id.AuthorMark)).setText(correcteur);

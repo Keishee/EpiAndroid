@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.joseph.app.adapter.moduleListViewAdapter;
 import com.example.joseph.app.helper.ActiveUser;
 import com.example.joseph.app.helper.ApiIntra;
+import com.example.joseph.app.helper.MarkInfo;
 import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -45,7 +46,9 @@ import java.util.logging.Handler;
 public class GradeFragment extends Fragment {
     private final String TAG = "GradeFragment";
     private String currentSemester = "1";
+    private String currentCodeModule = "";
     private ArrayList<String> ModulesArrays = null;
+    private ArrayList<MarkInfo> MarksArrays = null;
 
     private View view;
 
@@ -89,6 +92,7 @@ public class GradeFragment extends Fragment {
             public void run() {
                 try {
                     SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                    final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
 
                     ApiIntra.getMarks();
                     String MarksJson = prefs.getString("marks", null);
@@ -101,14 +105,14 @@ public class GradeFragment extends Fragment {
                     if (MarksArray == null || ModulesArray == null)
                         return;
 
-                    final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
                     final ArrayList<String> semester = new ArrayList<String>();
 
                     for (int i = 0; i <= user.getSemester(); i++) {
                         semester.add(i, "Semester " + Integer.toString(i));
                     }
 
-                    ModulesArrays = sortModuleBySemester(ModulesArray, currentSemester);
+//                    ModulesArrays = sortModuleBySemester(ModulesArray, currentSemester);
+//                    MarksArrays = sortMarksBySemesterAndModule(MarksArray, currentSemester, currentModule);
 
                     final ListView lv = (ListView) getActivity().findViewById(R.id.SemestreListView);
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,7 +127,25 @@ public class GradeFragment extends Fragment {
                                     ModuleListView.setAdapter(ModuleCustomAdapter);
                                 }
                             });
-                                }});
+                        }});
+
+                    final ListView lv2 = (ListView) getActivity().findViewById(R.id.ModuleListView);
+                    lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
+                            currentCodeModule = Integer.toString(myItemInt);
+                            if (MarksArray != null)
+                                MarksArrays = sortMarksBySemesterAndModule(MarksArray, currentCodeModule);
+                            if (MarksArrays != null) {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
+                                        markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArrays);
+                                        MarksListView.setAdapter(MarkscustomAdapter);
+                                    }
+                                });
+                            }
+                        }});
 
                     handler.post(new Runnable() {
                         @Override
@@ -139,7 +161,7 @@ public class GradeFragment extends Fragment {
                             ModuleListView.setAdapter(ModuleCustomAdapter);
 
                             ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
-                            markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArray);
+                            markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArrays);
                             MarksListView.setAdapter(MarkscustomAdapter);
                         }
                     });
@@ -164,13 +186,32 @@ public class GradeFragment extends Fragment {
         return sorted;
     }
 
+    private ArrayList<MarkInfo> sortMarksBySemesterAndModule(JsonArray array, String Module) {
+        final ArrayList<MarkInfo> sorted = new ArrayList<MarkInfo>();
+        if (array == null)
+            return null;
+        for (int i = 0; i < array.size(); i++){
+            String tmp;
+            JsonObject obj = (JsonObject)array.get(i);
+            if (obj != null) {
+                if (obj.get("titlemodule") != null)
+                {
+                   String module = obj.get("titlemodule").getAsString();
+                   if (ModulesArrays != null && ModulesArrays.get(Integer.parseInt(Module)) != null && module.equalsIgnoreCase(ModulesArrays.get(Integer.parseInt(Module)))) {
+                        sorted.add(new MarkInfo(obj.get("title").getAsString(), obj.get("correcteur").getAsString(), obj.get("comment").getAsString(), obj.get("final_note").getAsString()));
+                    }
+                }
+            }
+
+        }
+        return sorted;
+    }
 
     @Override
     public void onStart() {
         super.onStart();
         getAllMarks();
     }
-
 
     @Override
     public void onAttach(Context context) {
