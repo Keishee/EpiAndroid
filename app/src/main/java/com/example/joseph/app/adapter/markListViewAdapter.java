@@ -43,15 +43,18 @@ public class markListViewAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.custom_message_row_grade_marks, null);
 
         JsonObject obj = (JsonObject) jArray.get(position);
-        String title = obj.get("title").getAsString();
-        String comment = obj.get("comment").getAsString();
-        String mark = obj.get("final_note").getAsString();
-        String correcteur = obj.get("correcteur").getAsString();
-
-        ((TextView) vi.findViewById(R.id.TitleMark)).setText(title);
-        ((TextView) vi.findViewById(R.id.MarkMark)).setText(mark);
-        ((TextView) vi.findViewById(R.id.AuthorMark)).setText(correcteur);
-        ((TextView) vi.findViewById(R.id.CommentMark)).setText(comment);
+        if (obj != null) {
+            try {
+                String title = obj.get("title").getAsString();
+                String comment = obj.get("comment").getAsString();
+                String mark = obj.get("final_note").getAsString();
+                String correcteur = obj.get("correcteur").getAsString();
+                ((TextView) vi.findViewById(R.id.TitleMark)).setText(title);
+                ((TextView) vi.findViewById(R.id.MarkMark)).setText(mark);
+                ((TextView) vi.findViewById(R.id.AuthorMark)).setText(correcteur);
+                ((TextView) vi.findViewById(R.id.CommentMark)).setText(comment);
+            }catch (Exception e) {}
+        }
         return vi;
     }
 
