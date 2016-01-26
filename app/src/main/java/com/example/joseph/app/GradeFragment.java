@@ -149,7 +149,7 @@ public class GradeFragment extends Fragment {
                         }
                     });
                 } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
+                    Log.e(TAG, "Error: " + e.getMessage());
                 }
             }
         }).start();

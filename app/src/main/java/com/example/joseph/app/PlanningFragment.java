@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 
@@ -153,7 +155,11 @@ public class PlanningFragment extends Fragment {
                         planningInfos.add(new PlanningInfo(title, module, csemester, room, start, end, false));
                     }
                 }
-                // TODO: order planningInfos
+                Collections.sort(planningInfos, new Comparator<PlanningInfo>() {
+                    public int compare(PlanningInfo p1, PlanningInfo p2) {
+                        return (int)(p1.getStartDate().getTime() - p2.getStartDate().getTime());
+                    }
+                });
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
