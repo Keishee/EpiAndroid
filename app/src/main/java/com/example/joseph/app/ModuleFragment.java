@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 
 import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.adapter.moduleListViewAdapter;
@@ -42,6 +44,10 @@ public class ModuleFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private View rootView;
+
+    private Boolean registered = true;
 
     public ModuleFragment() {
         // Required empty public constructor
@@ -78,7 +84,8 @@ public class ModuleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_module, container, false);
+        rootView = inflater.inflate(R.layout.fragment_module, container, false);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -108,6 +115,20 @@ public class ModuleFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        Switch s = (Switch) rootView.findViewById(R.id.moduleSwitch);
+        s.setChecked(true);
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && !registered) {
+                    registered = true;
+                    loadModule();
+                } else if (!isChecked && registered) {
+                    registered = false;
+                    loadModule();
+                }
+            }
+        });
         loadModule();
     }
 
@@ -140,7 +161,7 @@ public class ModuleFragment extends Fragment {
                         @Override
                         public void run() {
                             ListView yourListView = (ListView) getActivity().findViewById(R.id.moduleListView);
-                            moduleListViewAdapter customAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), array);
+                            moduleListViewAdapter customAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), array, registered);
                             yourListView.setAdapter(customAdapter);
                         }
                     });

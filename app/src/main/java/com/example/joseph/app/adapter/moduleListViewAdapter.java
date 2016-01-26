@@ -20,18 +20,20 @@ public class moduleListViewAdapter extends BaseAdapter {
     private JsonArray jArray;
     private LayoutInflater inflater;
 
-    public moduleListViewAdapter(Context _context, JsonArray array) {
+    public moduleListViewAdapter(Context _context, JsonArray array, Boolean registered) {
         jArray = array;
         inflater = (LayoutInflater) _context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        JsonArray tmp = new JsonArray();
-        for (JsonElement obj : jArray) {
-            JsonObject obj2 = obj.getAsJsonObject();
-            if (obj2.get("status").getAsString().equals("ongoing")) {
-                tmp.add(obj);
+        if (registered) {
+            JsonArray tmp = new JsonArray();
+            for (JsonElement obj : jArray) {
+                JsonObject obj2 = obj.getAsJsonObject();
+                if (obj2.get("status").getAsString().equals("ongoing")) {
+                    tmp.add(obj);
+                }
             }
+            jArray = tmp;
         }
-        jArray = tmp;
     }
 
     @Override
