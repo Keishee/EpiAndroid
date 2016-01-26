@@ -60,5 +60,32 @@
             android:layout_below="@+id/planningStart"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Token"
+            android:id="@+id/tokenButton"
+            android:layout_below="@+id/planningEnd"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:enabled="true"
+            android:visibility="gone"
+            android:minHeight="0dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/tokenField"
+            android:layout_below="@+id/planningEnd"
+            android:layout_toRightOf="@+id/tokenButton"
+            android:layout_toEndOf="@+id/tokenButton"
+            android:visibility="gone"
+            android:textColor="#454545"
+            android:maxLength="8"
+            android:hint="@string/token_hint" />
     </RelativeLayout>
 </LinearLayout>

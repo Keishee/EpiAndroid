@@ -19,5 +19,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="Token">Send</string>
+    <string name="token_hint">Enter token</string>
+
     <string name="toggle_registered_text">Registered only</string>
 </resources>
