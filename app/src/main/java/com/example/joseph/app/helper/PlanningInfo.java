@@ -17,10 +17,8 @@ public class PlanningInfo {
     private String end;
     private Date startDate;
     private Date endDate;
-
     boolean registered;
 
-    // Todo: stock start/end as Date?
     public PlanningInfo(String title, String module, int semester, String room, String start, String end, boolean registered) {
         this.title = title;
         this.module = module;
@@ -85,4 +83,5 @@ public class PlanningInfo {
     public int getSemester() {
         return semester;
     }
+
 }
