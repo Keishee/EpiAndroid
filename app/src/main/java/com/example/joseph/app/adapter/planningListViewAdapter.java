@@ -31,6 +31,10 @@ public class planningListViewAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public void setPlanningInfos(ArrayList<PlanningInfo> planningInfos) {
+        this.planningInfos = planningInfos;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;

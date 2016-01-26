@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 
 import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.adapter.planningListViewAdapter;
@@ -45,6 +47,7 @@ import java.util.Date;
  */
 public class PlanningFragment extends Fragment {
     private static final String TAG = "PlanningFragment";
+    private ArrayList<PlanningInfo> planningInfos;
     private OnFragmentInteractionListener mListener;
 
     public PlanningFragment() {
@@ -124,7 +127,7 @@ public class PlanningFragment extends Fragment {
                 JsonParser parser = new JsonParser();
                 JsonArray array = (JsonArray) parser.parse(response);
 
-                final ArrayList<PlanningInfo> planningInfos = new ArrayList<>();
+                planningInfos = new ArrayList<>();
                 for (JsonElement elem : array) {
                     JsonObject obj = elem.getAsJsonObject();
                     if (obj.get("semester").getAsInt() == semester) {
@@ -161,6 +164,25 @@ public class PlanningFragment extends Fragment {
         super.onStart();
         try {
             getWeeklySemesterCoursesAndShow();
+            Switch rSwitch = (Switch)getView().findViewById(R.id.registerSwitch);
+            rSwitch.setOnCheckedChangeListener((new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    ListView yourListView = (ListView) getActivity().findViewById(R.id.planningListView);
+                    planningListViewAdapter adapter = (planningListViewAdapter)yourListView.getAdapter();
+                    if (isChecked) {
+                        ArrayList<PlanningInfo> onlyRegistered = new ArrayList<>();
+                        for (PlanningInfo pi : planningInfos) {
+                            if (pi.isRegistered())
+                                onlyRegistered.add(pi);
+                        }
+                        adapter.setPlanningInfos(onlyRegistered);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        adapter.setPlanningInfos(planningInfos);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }));
         } catch (Exception e) {
             Log.e(TAG, "Error: " + e.getMessage());
         }

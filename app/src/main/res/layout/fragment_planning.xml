@@ -5,10 +5,30 @@
     tools:context="com.example.joseph.app.PlanningFragment">
 
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/planningListView"
-        android:layout_gravity="center"
-        android:headerDividersEnabled="false" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        ToggleButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/toggle_registered_text"
+            android:id="@+id/toggleButton" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/toggle_registered_text"
+            android:id="@+id/registerSwitch" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/planningListView"
+            android:layout_gravity="center_horizontal|bottom"
+            android:headerDividersEnabled="false" />
+
+    </LinearLayout>
+
 </FrameLayout>
