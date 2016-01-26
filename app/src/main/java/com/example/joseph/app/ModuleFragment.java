@@ -10,15 +10,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.adapter.moduleListViewAdapter;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -134,7 +138,20 @@ public class ModuleFragment extends Fragment {
 
                     Log.i(TAG, modules);
 
-                    final JsonArray array = JsonGrabber.getArrayFromPath(modules, "items");
+                    JsonArray arr = JsonGrabber.getArrayFromPath(modules, "items");
+
+                    if (registered) {
+                        JsonArray tmp = new JsonArray();
+                        for (JsonElement obj : arr) {
+                            JsonObject obj2 = obj.getAsJsonObject();
+                            if (obj2.get("status").getAsString().equals("ongoing")) {
+                                tmp.add(obj);
+                            }
+                        }
+                        arr = tmp;
+                    }
+
+                    final JsonArray array = arr;
 
                     Log.i(TAG, array.toString());
 
@@ -142,8 +159,45 @@ public class ModuleFragment extends Fragment {
                         @Override
                         public void run() {
                             ListView yourListView = (ListView) getActivity().findViewById(R.id.moduleListView);
-                            moduleListViewAdapter customAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), array, registered);
+                            moduleListViewAdapter customAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), array);
                             yourListView.setAdapter(customAdapter);
+
+                            yourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    View v = rootView.findViewById(R.id.moduleLayout);
+                                    v.setVisibility(View.INVISIBLE);
+                                    v = rootView.findViewById(R.id.projectLayout);
+                                    v.setVisibility(View.VISIBLE);
+                                    loadProjects(array, position);
+                                }
+                            });
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }).start();
+    }
+
+    public void loadProjects(JsonArray array, int postion) {
+        final Handler handler = new Handler();
+        final JsonObject jo = (JsonObject) array.get(postion);
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String code = jo.get("code").getAsString();
+                    String codeinstance = jo.get("codeinstance").getAsString();
+                    Calendar c = Calendar.getInstance();
+                    String year = "" + c.get(Calendar.YEAR);
+                    String json = ApiIntra.getModule("2015", code, codeinstance);
+                    final String descrition = JsonGrabber.getVariableAndCast(json, "description");
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            TextView tv = (TextView) rootView.findViewById(R.id.descriptionTextView);
+                            tv.setText(descrition);
                         }
                     });
                 } catch (Exception e) {
