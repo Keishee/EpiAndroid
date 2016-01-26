@@ -167,19 +167,21 @@ public class PlanningFragment extends Fragment {
             Switch rSwitch = (Switch)getView().findViewById(R.id.registerSwitch);
             rSwitch.setOnCheckedChangeListener((new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    ListView yourListView = (ListView) getActivity().findViewById(R.id.planningListView);
-                    planningListViewAdapter adapter = (planningListViewAdapter)yourListView.getAdapter();
-                    if (isChecked) {
-                        ArrayList<PlanningInfo> onlyRegistered = new ArrayList<>();
-                        for (PlanningInfo pi : planningInfos) {
-                            if (pi.isRegistered())
-                                onlyRegistered.add(pi);
+                    if (planningInfos != null) {
+                        ListView yourListView = (ListView) getActivity().findViewById(R.id.planningListView);
+                        planningListViewAdapter adapter = (planningListViewAdapter) yourListView.getAdapter();
+                        if (isChecked) {
+                            ArrayList<PlanningInfo> onlyRegistered = new ArrayList<>();
+                            for (PlanningInfo pi : planningInfos) {
+                                if (pi.isRegistered())
+                                    onlyRegistered.add(pi);
+                            }
+                            adapter.setPlanningInfos(onlyRegistered);
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            adapter.setPlanningInfos(planningInfos);
+                            adapter.notifyDataSetChanged();
                         }
-                        adapter.setPlanningInfos(onlyRegistered);
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        adapter.setPlanningInfos(planningInfos);
-                        adapter.notifyDataSetChanged();
                     }
                 }
             }));
