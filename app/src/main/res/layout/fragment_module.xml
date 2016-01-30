@@ -18,27 +18,41 @@
             android:id="@+id/moduleListView"
             android:layout_gravity="center_horizontal|bottom" />
 
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/moduleSwitch"
-            android:layout_gravity="left|top"
-            android:text="@string/toggle_registered_text" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:weightSum="1">
 
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/onGoingOnly"
-            android:id="@+id/onGoingSwitch"
-            android:layout_gravity="center_horizontal|top" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.65">
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/refresh"
-            android:id="@+id/refreshButton"
-            android:layout_gravity="right|top" />
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onGoingOnly"
+                    android:id="@+id/onGoingSwitch"
+                    android:layout_gravity="top" />
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/moduleSwitch"
+                    android:layout_gravity="left|top"
+                    android:text="@string/toggle_registered_text" />
+            </LinearLayout>
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/refresh"
+                android:id="@+id/refreshButton"
+                android:layout_gravity="right|top" />
+        </LinearLayout>
 
     </FrameLayout>
 
