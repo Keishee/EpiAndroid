@@ -125,14 +125,17 @@ public class ModuleFragment extends Fragment {
                     String login = ((FrontPageActivity) getActivity()).getLogin();
                     final String response = ApiIntra.getUser(login);
 
-                    Calendar c = Calendar.getInstance();
-                    String year = "" + c.get(Calendar.YEAR);
-                    String location = JsonGrabber.getVariableAndCast(response, "location");
-                    String course = JsonGrabber.getVariableAndCast(response, "course_code");
-                    String modules = ApiIntra.getAllModules(year, location, course);
+                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                    String modules = prefs.getString("allModules", "");
 
-//                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-//                    String modules = prefs.getString("allModules", "");
+                    if (modules.isEmpty()) {
+                        Calendar c = Calendar.getInstance();
+                        String year = "" + c.get(Calendar.YEAR);
+                        String location = JsonGrabber.getVariableAndCast(response, "location");
+                        String course = JsonGrabber.getVariableAndCast(response, "course_code");
+                        modules = ApiIntra.getAllModules(year, location, course);
+                    }
+
                     if (modules.isEmpty())
                         return;
 
@@ -153,7 +156,7 @@ public class ModuleFragment extends Fragment {
 
                     final JsonArray array = arr;
 
-                    Log.i(TAG, array.toString());
+                    //Log.i(TAG, array.toString());
 
                     handler.post(new Runnable() {
                         @Override
@@ -169,6 +172,7 @@ public class ModuleFragment extends Fragment {
                                     v.setVisibility(View.INVISIBLE);
                                     v = rootView.findViewById(R.id.projectLayout);
                                     v.setVisibility(View.VISIBLE);
+                                    page = 2;
                                     loadProjects(array, position);
                                 }
                             });
@@ -205,6 +209,20 @@ public class ModuleFragment extends Fragment {
                 }
             }
         }).start();
+    }
+
+    private int page = 1;
+
+    public void backPressed() {
+        if (page == 1) {
+            return;
+        } else if (page == 2) {
+            View v = rootView.findViewById(R.id.moduleLayout);
+            v.setVisibility(View.VISIBLE);
+            v = rootView.findViewById(R.id.projectLayout);
+            v.setVisibility(View.INVISIBLE);
+            loadModule();
+        }
     }
 
     /**
