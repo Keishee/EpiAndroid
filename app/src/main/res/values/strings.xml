@@ -25,4 +25,6 @@
     <string name="text_grade">Grade</string>
     <string name="text_semester">Semester</string>
     <string name="toggle_registered_text">Registered only</string>
+    <string name="onGoingOnly">Ongoing only</string>
+    <string name="refresh">Refresh</string>
 </resources>

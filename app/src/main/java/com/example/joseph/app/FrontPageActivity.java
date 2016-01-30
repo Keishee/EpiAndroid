@@ -66,7 +66,9 @@ public class FrontPageActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (currentFragment != null && currentFragment instanceof ModuleFragment) {
-            ((ModuleFragment) currentFragment).backPressed();
+            if (!((ModuleFragment) currentFragment).backPressed()) {
+                super.onBackPressed();
+            }
         }
         else {
             super.onBackPressed();

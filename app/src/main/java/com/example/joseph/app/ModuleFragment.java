@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -43,6 +44,8 @@ public class ModuleFragment extends Fragment {
     private View rootView;
 
     private Boolean registered = true;
+    private Boolean ongoing = false;
+    private Boolean load = false;
 
     public ModuleFragment() {
         // Required empty public constructor
@@ -114,10 +117,105 @@ public class ModuleFragment extends Fragment {
                 }
             }
         });
+        s = (Switch) rootView.findViewById(R.id.onGoingSwitch);
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && !ongoing) {
+                    ongoing = true;
+                    loadModule();
+                } else if (!isChecked && ongoing) {
+                    ongoing = false;
+                    loadModule();
+                }
+            }
+        });
+        Button b = (Button) rootView.findViewById(R.id.refreshButton);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshModule();
+            }
+        });
         loadModule();
     }
 
+    public void refreshModule() {
+        page = 1;
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String login = ((FrontPageActivity) getActivity()).getLogin();
+                    final String response = ApiIntra.getUser(login);
+
+
+                    Calendar c = Calendar.getInstance();
+                    String year = "" + c.get(Calendar.YEAR);
+                    String location = JsonGrabber.getVariableAndCast(response, "location");
+                    String course = JsonGrabber.getVariableAndCast(response, "course_code");
+                    String modules = ApiIntra.getAllModules(year, location, course);
+
+                    if (modules.isEmpty())
+                        return;
+
+                    Log.i(TAG, modules);
+
+                    JsonArray arr = JsonGrabber.getArrayFromPath(modules, "items");
+
+                    if (registered) {
+                        JsonArray tmp = new JsonArray();
+                        for (JsonElement obj : arr) {
+                            JsonObject obj2 = obj.getAsJsonObject();
+                            if (!ongoing) {
+                                if (obj2.get("status").getAsString().equals("ongoing") || obj2.get("status").getAsString().equals("valid")) {
+                                    tmp.add(obj);
+                                }
+                            } else {
+                                if (obj2.get("status").getAsString().equals("ongoing")) {
+                                    tmp.add(obj);
+                                }
+                            }
+                        }
+                        arr = tmp;
+                    }
+
+                    final JsonArray array = arr;
+
+                    //Log.i(TAG, array.toString());
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (getActivity() == null)
+                                return;
+                            ListView yourListView = (ListView) getActivity().findViewById(R.id.moduleListView);
+                            if (yourListView == null)
+                                return;
+                            moduleListViewAdapter customAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), array);
+                            yourListView.setAdapter(customAdapter);
+
+                            yourListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    View v = rootView.findViewById(R.id.moduleLayout);
+                                    v.setVisibility(View.INVISIBLE);
+                                    v = rootView.findViewById(R.id.projectLayout);
+                                    v.setVisibility(View.VISIBLE);
+                                    loadProjects(array, position);
+                                }
+                            });
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }).start();
+    }
+
     public void loadModule() {
+        page = 1;
         final Handler handler = new Handler();
         new Thread(new Runnable() {
             public void run() {
@@ -147,8 +245,14 @@ public class ModuleFragment extends Fragment {
                         JsonArray tmp = new JsonArray();
                         for (JsonElement obj : arr) {
                             JsonObject obj2 = obj.getAsJsonObject();
-                            if (obj2.get("status").getAsString().equals("ongoing")) {
-                                tmp.add(obj);
+                            if (!ongoing) {
+                                if (obj2.get("status").getAsString().equals("ongoing") || obj2.get("status").getAsString().equals("valid")) {
+                                    tmp.add(obj);
+                                }
+                            } else {
+                                if (obj2.get("status").getAsString().equals("ongoing")) {
+                                    tmp.add(obj);
+                                }
                             }
                         }
                         arr = tmp;
@@ -162,7 +266,7 @@ public class ModuleFragment extends Fragment {
                         @Override
                         public void run() {
                             if (getActivity() == null)
-                                return ;
+                                return;
                             ListView yourListView = (ListView) getActivity().findViewById(R.id.moduleListView);
                             if (yourListView == null)
                                 return;
@@ -176,7 +280,6 @@ public class ModuleFragment extends Fragment {
                                     v.setVisibility(View.INVISIBLE);
                                     v = rootView.findViewById(R.id.projectLayout);
                                     v.setVisibility(View.VISIBLE);
-                                    page = 2;
                                     loadProjects(array, position);
                                 }
                             });
@@ -189,9 +292,10 @@ public class ModuleFragment extends Fragment {
         }).start();
     }
 
-    public void loadProjects(JsonArray array, int postion) {
+    public void loadProjects(JsonArray array, int position) {
+        page = 2;
         final Handler handler = new Handler();
-        final JsonObject jo = (JsonObject) array.get(postion);
+        final JsonObject jo = (JsonObject) array.get(position);
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -217,16 +321,16 @@ public class ModuleFragment extends Fragment {
 
     private int page = 1;
 
-    public void backPressed() {
-        if (page == 1) {
-            return;
-        } else if (page == 2) {
+    public Boolean backPressed() {
+        if (page == 2) {
             View v = rootView.findViewById(R.id.moduleLayout);
             v.setVisibility(View.VISIBLE);
             v = rootView.findViewById(R.id.projectLayout);
             v.setVisibility(View.INVISIBLE);
             loadModule();
+            return true;
         }
+        return false;
     }
 
     /**

@@ -24,6 +24,22 @@
             android:id="@+id/moduleSwitch"
             android:layout_gravity="left|top"
             android:text="@string/toggle_registered_text" />
+
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onGoingOnly"
+            android:id="@+id/onGoingSwitch"
+            android:layout_gravity="center_horizontal|top" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/refresh"
+            android:id="@+id/refreshButton"
+            android:layout_gravity="right|top" />
+
     </FrameLayout>
 
     <LinearLayout
@@ -37,13 +53,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/descriptionTextView" />
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Switch"
-            android:id="@+id/switch1"
-            android:layout_gravity="center_horizontal" />
 
         <ListView
             android:layout_width="match_parent"
