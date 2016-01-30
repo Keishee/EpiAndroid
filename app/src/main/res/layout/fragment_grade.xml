@@ -6,23 +6,72 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ListView
-        android:layout_width="133dp"
-        android:layout_height="300dp"
-        android:id="@+id/SemestreListView"
-        android:layout_gravity="left|top"
-        android:choiceMode="multipleChoice" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ListView
-        android:layout_width="190dp"
-        android:layout_height="300dp"
-        android:id="@+id/ModuleListView"
-        android:layout_gravity="right|top"
-        android:clickable="false" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="195dp"
-        android:id="@+id/MarksListView"
-        android:layout_gravity="center_horizontal|bottom" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/text_semester"
+                    android:id="@+id/markSemesterText" />
+
+                <ListView
+                    android:layout_width="180dp"
+                    android:layout_height="200dp"
+                    android:id="@+id/SemestreListView"
+                    android:layout_gravity="left|top"
+                    android:choiceMode="multipleChoice" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/text_module"
+                    android:id="@+id/markModuleText" />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/ModuleListView"
+                    android:layout_gravity="right|top"
+                    android:clickable="false" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/text_grade"
+            android:id="@+id/markGradeText" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/MarksListView"
+            android:layout_gravity="center_horizontal|bottom" />
+    </LinearLayout>
+
 </FrameLayout>

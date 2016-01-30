@@ -21,6 +21,8 @@
     <string name="action_settings">Settings</string>
     <string name="Token">Send</string>
     <string name="token_hint">Enter token</string>
-
+    <string name="text_module">Module</string>
+    <string name="text_grade">Grade</string>
+    <string name="text_semester">Semester</string>
     <string name="toggle_registered_text">Registered only</string>
 </resources>
