@@ -29,7 +29,7 @@ public class trombiGridViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return jArray.size();
+        return jArray == null ? 0 : jArray.size();
     }
 
     @Override

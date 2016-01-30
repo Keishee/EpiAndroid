@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment {
                     String promo = JsonGrabber.getVariableAndCast(response, "promo");
                     final String goodPromo = promo == null ? "2018" : promo;
                     String loc = JsonGrabber.getVariableAndCast(response, "location");
-                    final String goodloc = loc == null ? "FR/PAR" : promo;
+                    final String goodloc = loc == null ? "FR/PAR" : loc;
                     String studentyear = JsonGrabber.getVariableAndCast(response, "studentyear");
                     final String goodyear = loc == null ? "1" : studentyear;
                     user.setLogTime(hours);
