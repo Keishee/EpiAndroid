@@ -12,41 +12,25 @@
             android:visibility="visible"
             android:id="@+id/moduleLayout">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:weightSum="1">
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="453dp"
+                android:id="@+id/moduleListView"
+                android:layout_gravity="center_horizontal|bottom" />
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="0.65">
-
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/onGoingOnly"
-                    android:id="@+id/onGoingSwitch"
-                    android:layout_gravity="top" />
-
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/moduleSwitch"
-                    android:layout_gravity="left|top"
-                    android:text="@string/toggle_registered_text" />
-            </LinearLayout>
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
+            <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/refresh"
-                android:id="@+id/refreshButton"
-                android:layout_gravity="right|top" />
-        </LinearLayout>
+                android:id="@+id/moduleSwitch"
+                android:layout_gravity="left|top"
+                android:text="@string/toggle_registered_text" />
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/onGoingOnly"
+                android:id="@+id/onGoingSwitch"
+                android:layout_gravity="center_horizontal|top" />
 
             <Button
                 style="?android:attr/buttonStyleSmall"
