@@ -158,7 +158,11 @@ public class ModuleFragment extends Fragment {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (getActivity() == null)
+                                return ;
                             ListView yourListView = (ListView) getActivity().findViewById(R.id.moduleListView);
+                            if (yourListView == null)
+                                return;
                             moduleListViewAdapter customAdapter = new moduleListViewAdapter(getActivity().getApplicationContext(), array);
                             yourListView.setAdapter(customAdapter);
 
