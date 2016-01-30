@@ -93,26 +93,34 @@ public class GradeFragment extends Fragment {
                 try {
                     SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
                     final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+                    JsonArray TmpMarksArray;
+                    JsonArray TmpModulesArray;
 
-                    ApiIntra.getMarks();
-                    String MarksJson = prefs.getString("marks", null);
-                    final JsonArray MarksArray = JsonGrabber.getArrayFromPath(MarksJson, "notes");
+                    String MarksJson = prefs.getString("marks", "");
+                    if (MarksJson.isEmpty()) {
+                        ApiIntra.getMarks();
+                        MarksJson = prefs.getString("marks", null);
+                    }
+                    TmpMarksArray = JsonGrabber.getArrayFromPath(MarksJson, "notes");
 
-                    ApiIntra.getModules();
-                    String ModuleJson = prefs.getString("modules", null);
-                    final JsonArray ModulesArray = JsonGrabber.getArrayFromPath(ModuleJson, "modules");
+                    String ModuleJson = prefs.getString("modules", "");
+                    if (ModuleJson.isEmpty()){
+                        ApiIntra.getModules();
+                        ModuleJson = prefs.getString("modules", null);
+                    }
+
+                    TmpModulesArray = JsonGrabber.getArrayFromPath(ModuleJson, "modules");
+                    final JsonArray MarksArray = TmpMarksArray;
+                    final JsonArray ModulesArray = TmpModulesArray;
 
                     if (MarksArray == null || ModulesArray == null)
                         return;
 
-                    final ArrayList<String> semester = new ArrayList<String>();
+                    final ArrayList<String> semester = new ArrayList<>();
 
                     for (int i = 0; i <= user.getSemester(); i++) {
                         semester.add(i, "Semester " + Integer.toString(i));
                     }
-
-//                    ModulesArrays = sortModuleBySemester(ModulesArray, currentSemester);
-//                    MarksArrays = sortMarksBySemesterAndModule(MarksArray, currentSemester, currentModule);
 
                     final ListView lv = (ListView) getActivity().findViewById(R.id.SemestreListView);
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -137,8 +145,7 @@ public class GradeFragment extends Fragment {
                     lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                             currentCodeModule = Integer.toString(myItemInt);
-                            if (MarksArray != null)
-                                MarksArrays = sortMarksBySemesterAndModule(MarksArray, currentCodeModule);
+                            MarksArrays = sortMarksBySemesterAndModule(MarksArray, currentCodeModule);
                             if (MarksArrays != null) {
                                 handler.post(new Runnable() {
                                     @Override
@@ -185,13 +192,13 @@ public class GradeFragment extends Fragment {
     }
 
     private ArrayList<String> sortModuleBySemester(JsonArray array, String semester) {
-        final ArrayList<String> sorted = new ArrayList<String>();
+        final ArrayList<String> sorted = new ArrayList<>();
         for (int i = 0; i < array.size(); i++){
             String tmp;
             JsonObject obj = (JsonObject)array.get(i);
             if (obj != null) {
                 tmp = obj.get("semester").getAsString();
-                if (tmp == semester)
+                if (tmp.equals(semester))
                     sorted.add(obj.get("title").getAsString());
             }
         }
@@ -199,7 +206,7 @@ public class GradeFragment extends Fragment {
     }
 
     private ArrayList<MarkInfo> sortMarksBySemesterAndModule(JsonArray array, String Module) {
-        final ArrayList<MarkInfo> sorted = new ArrayList<MarkInfo>();
+        final ArrayList<MarkInfo> sorted = new ArrayList<>();
         if (array == null)
             return null;
         for (int i = 0; i < array.size(); i++){
