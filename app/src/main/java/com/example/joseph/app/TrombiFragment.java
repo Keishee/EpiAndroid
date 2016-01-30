@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,20 +64,35 @@ public class TrombiFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
-        ApiIntra.getListStudents(String.valueOf(user.getPromo()), user.getLocation());
+        getUsersAndShow();
 
-        if (getActivity() == null)
-            return;
-        SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-        String response = prefs.getString("students", null);
-        JsonArray array = JsonGrabber.getArrayFromPath(response, "items");
-        GridView trombiGridView = (GridView) getActivity().findViewById(R.id.trombiGridView);
-        if (trombiGridView == null)
-            return;
-        trombiGridViewAdapter trombiCustomAdapter = new trombiGridViewAdapter(getActivity().getApplicationContext(), array);
-        trombiGridView.setAdapter(trombiCustomAdapter);
+    }
 
+    private void getUsersAndShow() {
+        final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ApiIntra.getListStudents(String.valueOf(user.getPromo()), user.getLocation());
+
+                if (getActivity() == null)
+                    return;
+                SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                String response = prefs.getString("students", null);
+                final JsonArray array = JsonGrabber.getArrayFromPath(response, "items");
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        GridView trombiGridView = (GridView) getActivity().findViewById(R.id.trombiGridView);
+                        if (trombiGridView == null)
+                            return;
+                        trombiGridViewAdapter trombiCustomAdapter = new trombiGridViewAdapter(getActivity().getApplicationContext(), array);
+                        trombiGridView.setAdapter(trombiCustomAdapter);
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
