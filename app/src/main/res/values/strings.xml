@@ -27,6 +27,8 @@
     <string name="toggle_registered_text">Registered only</string>
     <string name="onGoingOnly">Ongoing only</string>
     <string name="refresh">Refresh</string>
+    <string name="search">Search</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
