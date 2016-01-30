@@ -150,6 +150,8 @@ public class TrombiFragment extends Fragment {
                         promo.setText("Promo: \t" + goodPromo);
                         loc.setText("Location: \t" + goodloc);
                         log.setText("Log: \t" + hours + " hour(s)");
+
+                        tel.setVisibility(goodphone.equals("N/A") ? View.GONE : View.VISIBLE);
                         tel.setText("Phone: \t" + goodphone);
                         mail.setText(goodName.equals("Leeroy Jenkins") ? "" : "Mail: \t" + login + "@epitech.eu");
 
