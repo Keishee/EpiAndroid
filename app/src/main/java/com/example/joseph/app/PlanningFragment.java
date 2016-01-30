@@ -92,13 +92,13 @@ public class PlanningFragment extends Fragment {
     }
 
     private int getUserSemester() {
-        final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+        final ActiveUser user = ((FrontPageActivity) getActivity()).getUser();
         String response = ApiIntra.getUser(user.getLogin());
         return JsonGrabber.getVariableAndCast(response, "semester");
     }
 
     private void getWeeklySemesterCoursesAndShow() {
-        final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+        final ActiveUser user = ((FrontPageActivity) getActivity()).getUser();
         final Handler handler = new Handler();
         new Thread(new Runnable() {
             @Override
@@ -113,10 +113,14 @@ public class PlanningFragment extends Fragment {
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(cal1.getTime());
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.DATE, +14);
-                String datePlusWeek =  new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+                String datePlusWeek = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 
                 ApiIntra.getPlanning(date, datePlusWeek);
-                SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                SharedPreferences prefs = null;
+                if (getActivity() != null)
+                    prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                if (prefs == null)
+                    return ;
                 String response = prefs.getString("planning", null);
                 JsonParser parser = new JsonParser();
                 JsonArray array = (JsonArray) parser.parse(response);
@@ -146,13 +150,17 @@ public class PlanningFragment extends Fragment {
                 }
                 Collections.sort(planningInfos, new Comparator<PlanningInfo>() {
                     public int compare(PlanningInfo p1, PlanningInfo p2) {
-                        return (int)(p1.getStartDate().getTime() - p2.getStartDate().getTime());
+                        return (int) (p1.getStartDate().getTime() - p2.getStartDate().getTime());
                     }
                 });
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (getActivity() == null)
+                            return ;
                         ListView yourListView = (ListView) getActivity().findViewById(R.id.planningListView);
+                        if (yourListView == null)
+                            return;
                         planningListViewAdapter customAdapter = new planningListViewAdapter(getActivity().getApplicationContext(), planningInfos);
                         yourListView.setAdapter(customAdapter);
                     }
@@ -166,7 +174,7 @@ public class PlanningFragment extends Fragment {
         super.onStart();
         try {
             getWeeklySemesterCoursesAndShow();
-            Switch rSwitch = (Switch)getView().findViewById(R.id.registerSwitch);
+            Switch rSwitch = (Switch) getView().findViewById(R.id.registerSwitch);
             rSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (planningInfos != null) {

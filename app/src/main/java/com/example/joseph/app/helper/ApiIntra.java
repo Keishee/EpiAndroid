@@ -278,6 +278,13 @@ public class ApiIntra {
         editor.commit();
     }
 
+    public static void getListStudents(String year, String location) {
+        String tmp = ApiManager.getApiCall("trombi", "token", _token, "year", year, "location", location);
+        SharedPreferences.Editor editor = activity.getPreferences(activity.MODE_PRIVATE).edit();
+        editor.putString("students", tmp);
+        editor.commit();
+    }
+
     /**
      * "login":"login_x"
      */

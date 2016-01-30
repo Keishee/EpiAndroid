@@ -20,7 +20,10 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:maxLines="1" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,11 +32,9 @@
             android:text="Mark"
             android:id="@+id/MarkMark"
             android:textColor="#3f3f3f"
-            android:layout_marginRight="51dp"
-            android:layout_marginEnd="51dp"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/AuthorMark"
-            android:layout_toStartOf="@+id/AuthorMark" />
+            android:layout_alignTop="@+id/AuthorMark"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,9 +43,10 @@
             android:text="Author"
             android:id="@+id/AuthorMark"
             android:textColor="#3f3f3f"
-            android:layout_below="@+id/titleView"
+            android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="false" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="23dp" />
 
         <TextView
             android:layout_width="wrap_content"

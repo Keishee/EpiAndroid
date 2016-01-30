@@ -122,7 +122,11 @@ public class GradeFragment extends Fragment {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    if (getActivity() == null)
+                                        return ;
                                     ListView ModuleListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
+                                    if (ModuleListView == null)
+                                        return ;
                                     semesterListViewAdapter ModuleCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), ModulesArrays);
                                     ModuleListView.setAdapter(ModuleCustomAdapter);
                                 }
@@ -140,6 +144,8 @@ public class GradeFragment extends Fragment {
                                     @Override
                                     public void run() {
                                         ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
+                                        if (MarksListView == null)
+                                            return ;
                                         markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArrays);
                                         MarksListView.setAdapter(MarkscustomAdapter);
                                     }
@@ -150,17 +156,23 @@ public class GradeFragment extends Fragment {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-
-                            // TODO afficher par rapport au semestre et a la matière.
+                            if (getActivity() == null)
+                                return;
                             ListView SemesterListView = (ListView)getActivity().findViewById(R.id.SemestreListView);
+                            if (SemesterListView == null)
+                                return ;
                             semesterListViewAdapter SemesterCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), semester);
                             SemesterListView.setAdapter(SemesterCustomAdapter);
 
                             ListView ModuleListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
+                            if (ModuleListView == null)
+                                return ;
                             semesterListViewAdapter ModuleCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), ModulesArrays);
                             ModuleListView.setAdapter(ModuleCustomAdapter);
 
                             ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
+                            if (MarksListView == null)
+                                return ;
                             markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArrays);
                             MarksListView.setAdapter(MarkscustomAdapter);
                         }
