@@ -123,9 +123,15 @@ public class HomeFragment extends Fragment {
                     final String goodName = name == null ? "Leeroy Jenkins" : name;
                     String gpa = JsonGrabber.getVariableAndCast(response, "gpa", "gpa");
                     final String goodGPA = gpa == null ? "0" : gpa;
+                    String promo = JsonGrabber.getVariableAndCast(response, "promo");
+                    final String goodPromo = promo == null ? "2018" : promo;
+                    String loc = JsonGrabber.getVariableAndCast(response, "location");
+                    final String goodloc = loc == null ? "FR/PAR" : promo;
                     user.setLogTime(hours);
                     user.setFullName(goodName);
                     user.setGPA(goodGPA);
+                    user.setPromo(Integer.parseInt(goodPromo));
+                    user.setLocation(goodloc);
                     user.setSemester(Integer.parseInt((String)JsonGrabber.getVariableAndCast(response, "semester")));
 
                     handler.post(new Runnable() {

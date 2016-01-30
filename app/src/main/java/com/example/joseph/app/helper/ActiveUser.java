@@ -13,8 +13,26 @@ public class ActiveUser {
     private Drawable userImage = null;
     private String logTime = null;
     private int semester = -1;
+    private int promo = -1;
+    private String location = null;
 
     public ActiveUser() {
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public int getPromo() {
+        return promo;
+    }
+
+    public void setPromo(int promo) {
+        this.promo = promo;
     }
 
     public int getSemester() {
