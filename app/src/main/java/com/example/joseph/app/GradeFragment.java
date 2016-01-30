@@ -126,7 +126,7 @@ public class GradeFragment extends Fragment {
                                         return ;
                                     ListView ModuleListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
                                     if (ModuleListView == null)
-                                        return;
+                                        return ;
                                     semesterListViewAdapter ModuleCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), ModulesArrays);
                                     ModuleListView.setAdapter(ModuleCustomAdapter);
                                 }
@@ -144,6 +144,8 @@ public class GradeFragment extends Fragment {
                                     @Override
                                     public void run() {
                                         ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
+                                        if (MarksListView == null)
+                                            return ;
                                         markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArrays);
                                         MarksListView.setAdapter(MarkscustomAdapter);
                                     }

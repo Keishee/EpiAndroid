@@ -65,7 +65,10 @@ public class FrontPageActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if (currentFragment != null && currentFragment instanceof ModuleFragment) {
+            ((ModuleFragment) currentFragment).backPressed();
+        }
+        else {
             super.onBackPressed();
         }
     }
