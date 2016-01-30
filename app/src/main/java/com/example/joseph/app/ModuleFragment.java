@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.adapter.moduleListViewAdapter;
+import com.example.joseph.app.adapter.projectListViewAdapter;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonArray;
@@ -301,15 +302,58 @@ public class ModuleFragment extends Fragment {
                 try {
                     String code = jo.get("code").getAsString();
                     String codeinstance = jo.get("codeinstance").getAsString();
-                    Calendar c = Calendar.getInstance();
-                    String year = "" + c.get(Calendar.YEAR);
-                    String json = ApiIntra.getModule("2015", code, codeinstance);
+                    String year = jo.get("begin").getAsString();
+                    year = year.split("-")[0];
+                    String json = ApiIntra.getModule(year, code, codeinstance);
+
                     final String descrition = JsonGrabber.getVariableAndCast(json, "description");
+                    final String title = JsonGrabber.getVariableAndCast(json, "title");
+                    final String credits = JsonGrabber.getVariableAndCast(json, "credits");
+                    final String rating = JsonGrabber.getVariableAndCast(json, "student_grade");
+                    final String start = JsonGrabber.getVariableAndCast(json, "begin");
+                    final String endRegister = JsonGrabber.getVariableAndCast(json, "end_register");
+                    final String end = JsonGrabber.getVariableAndCast(json, "end");
+
+                    JsonArray tmp = JsonGrabber.getArrayFromPath(json, "activites");
+                    JsonArray tmp2 = new JsonArray();
+                    for (JsonElement e : tmp) {
+                        JsonObject obj = e.getAsJsonObject();
+                        if (obj.get("is_projet").getAsBoolean()) {
+                            tmp2.add(e);
+                        }
+                    }
+                    final JsonArray array = tmp2;
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+
                             TextView tv = (TextView) rootView.findViewById(R.id.descriptionTextView);
                             tv.setText(descrition);
+
+                            tv = (TextView) rootView.findViewById(R.id.titleTextView);
+                            tv.setText(title);
+
+                            tv = (TextView) rootView.findViewById(R.id.creditsTextView);
+                            tv.setText(credits);
+
+                            tv = (TextView) rootView.findViewById(R.id.ratingTextView);
+                            tv.setText(rating);
+
+                            tv = (TextView) rootView.findViewById(R.id.startDateTextView);
+                            tv.setText(start);
+
+                            tv = (TextView) rootView.findViewById(R.id.endRegisterDateTextView);
+                            tv.setText(endRegister);
+
+                            tv = (TextView) rootView.findViewById(R.id.endDateTextView);
+                            tv.setText(end);
+
+                            ListView yourListView = (ListView) getActivity().findViewById(R.id.projectListView);
+                            if (yourListView == null)
+                                return;
+                            projectListViewAdapter customAdapter = new projectListViewAdapter(getActivity().getApplicationContext(), array);
+                            yourListView.setAdapter(customAdapter);
                         }
                     });
                 } catch (Exception e) {
