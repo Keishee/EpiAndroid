@@ -134,7 +134,7 @@ public class HomeFragment extends Fragment {
                     user.setGPA(goodGPA);
                     user.setPromo(Integer.parseInt(goodPromo));
                     user.setLocation(goodloc);
-                    user.setStudentYear(Integer.parseInt(studentyear));
+                    user.setStudentYear(Integer.parseInt(goodyear));
                     user.setSemester(Integer.parseInt((String)JsonGrabber.getVariableAndCast(response, "semester")));
 
                     handler.post(new Runnable() {

@@ -27,4 +27,6 @@
     <string name="toggle_registered_text">Registered only</string>
     <string name="onGoingOnly">Ongoing only</string>
     <string name="refresh">Refresh</string>
+    <string name="search">Search</string>
+
 </resources>
