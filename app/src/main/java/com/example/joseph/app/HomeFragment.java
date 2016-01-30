@@ -127,11 +127,14 @@ public class HomeFragment extends Fragment {
                     final String goodPromo = promo == null ? "2018" : promo;
                     String loc = JsonGrabber.getVariableAndCast(response, "location");
                     final String goodloc = loc == null ? "FR/PAR" : promo;
+                    String studentyear = JsonGrabber.getVariableAndCast(response, "studentyear");
+                    final String goodyear = loc == null ? "1" : studentyear;
                     user.setLogTime(hours);
                     user.setFullName(goodName);
                     user.setGPA(goodGPA);
                     user.setPromo(Integer.parseInt(goodPromo));
                     user.setLocation(goodloc);
+                    user.setStudentYear(Integer.parseInt(studentyear));
                     user.setSemester(Integer.parseInt((String)JsonGrabber.getVariableAndCast(response, "semester")));
 
                     handler.post(new Runnable() {
@@ -157,6 +160,8 @@ public class HomeFragment extends Fragment {
             public void run() {
                 try {
                     ApiIntra.getMessages();
+                    if (getActivity() == null)
+                        return;
                     SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
                     String response = prefs.getString("messages", null);
                     JsonParser jp = new JsonParser();

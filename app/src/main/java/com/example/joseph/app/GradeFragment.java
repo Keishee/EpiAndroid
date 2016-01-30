@@ -122,7 +122,11 @@ public class GradeFragment extends Fragment {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    if (getActivity() == null)
+                                        return ;
                                     ListView ModuleListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
+                                    if (ModuleListView == null)
+                                        return;
                                     semesterListViewAdapter ModuleCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), ModulesArrays);
                                     ModuleListView.setAdapter(ModuleCustomAdapter);
                                 }
