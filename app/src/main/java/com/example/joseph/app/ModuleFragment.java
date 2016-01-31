@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.adapter.moduleListViewAdapter;
 import com.example.joseph.app.adapter.projectListViewAdapter;
 import com.example.joseph.app.helper.ApiIntra;
@@ -27,7 +26,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.Calendar;
-import java.util.Date;
 
 
 /**
@@ -153,8 +151,8 @@ public class ModuleFragment extends Fragment {
 
                     Calendar c = Calendar.getInstance();
                     String year = "" + c.get(Calendar.YEAR);
-                    String location = JsonGrabber.getVariableAndCast(response, "location");
-                    String course = JsonGrabber.getVariableAndCast(response, "course_code");
+                    String location = JsonGrabber.getVariable(response, "location");
+                    String course = JsonGrabber.getVariable(response, "course_code");
                     String modules = ApiIntra.getAllModules(year, location, course);
 
                     if (modules.isEmpty())
@@ -228,8 +226,8 @@ public class ModuleFragment extends Fragment {
                     if (modules.isEmpty()) {
                         Calendar c = Calendar.getInstance();
                         String year = "" + c.get(Calendar.YEAR);
-                        String location = JsonGrabber.getVariableAndCast(response, "location");
-                        String course = JsonGrabber.getVariableAndCast(response, "course_code");
+                        String location = JsonGrabber.getVariable(response, "location");
+                        String course = JsonGrabber.getVariable(response, "course_code");
                         modules = ApiIntra.getAllModules(year, location, course);
                     }
 
@@ -302,13 +300,13 @@ public class ModuleFragment extends Fragment {
                     year = year.split("-")[0];
                     String json = ApiIntra.getModule(year, code, codeinstance);
 
-                    final String descrition = JsonGrabber.getVariableAndCast(json, "description");
-                    final String title = JsonGrabber.getVariableAndCast(json, "title");
-                    final String credits = JsonGrabber.getVariableAndCast(json, "credits");
-                    final String rating = JsonGrabber.getVariableAndCast(json, "student_grade");
-                    final String start = JsonGrabber.getVariableAndCast(json, "begin");
-                    final String endRegister = JsonGrabber.getVariableAndCast(json, "end_register");
-                    final String end = JsonGrabber.getVariableAndCast(json, "end");
+                    final String descrition = JsonGrabber.getVariable(json, "description");
+                    final String title = JsonGrabber.getVariable(json, "title");
+                    final String credits = JsonGrabber.getVariable(json, "credits");
+                    final String rating = JsonGrabber.getVariable(json, "student_grade");
+                    final String start = JsonGrabber.getVariable(json, "begin");
+                    final String endRegister = JsonGrabber.getVariable(json, "end_register");
+                    final String end = JsonGrabber.getVariable(json, "end");
 
                     JsonArray tmp = JsonGrabber.getArrayFromPath(json, "activites");
                     JsonArray tmp2 = new JsonArray();
@@ -345,6 +343,8 @@ public class ModuleFragment extends Fragment {
                             tv = (TextView) rootView.findViewById(R.id.endDateTextView);
                             tv.setText(end);
 
+                            if (getActivity() == null)
+                                return;
                             ListView yourListView = (ListView) getActivity().findViewById(R.id.projectListView);
                             if (yourListView == null)
                                 return;

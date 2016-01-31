@@ -16,20 +16,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.joseph.app.adapter.trombiGridViewAdapter;
-import com.example.joseph.app.helper.ActiveUser;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.json.JsonGrabber;
-import com.google.gson.JsonArray;
-
-import org.json.JSONArray;
-import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -109,17 +100,17 @@ public class TrombiFragment extends Fragment {
             @Override
             public void run() {
                 String response = ApiIntra.getUser(login);
-                String hour = JsonGrabber.getVariableAndCast(response, "nsstat", "active");
+                String hour = JsonGrabber.getVariable(response, "nsstat", "active");
                 final String hours = hour == null ? "0" : hour;
-                String name = JsonGrabber.getVariableAndCast(response, "title");
+                String name = JsonGrabber.getVariable(response, "title");
                 final String goodName = name == null ? "Leeroy Jenkins" : name;
-                String gpa = JsonGrabber.getVariableAndCast(response, "gpa", "gpa");
+                String gpa = JsonGrabber.getVariable(response, "gpa", "gpa");
                 final String goodGPA = gpa == null ? "0" : gpa;
-                String promo = JsonGrabber.getVariableAndCast(response, "promo");
+                String promo = JsonGrabber.getVariable(response, "promo");
                 final String goodPromo = promo == null ? "2018" : promo;
-                String loc = JsonGrabber.getVariableAndCast(response, "location");
+                String loc = JsonGrabber.getVariable(response, "location");
                 final String goodloc = loc == null ? "FR/PAR" : loc;
-                final String phone = JsonGrabber.getVariableAndCast(response, "userinfo", "telephone", "value");
+                final String phone = JsonGrabber.getVariable(response, "userinfo", "telephone", "value");
                 final String goodphone = phone == null ? "N/A" : phone;
 
                 Drawable d = null;
@@ -127,7 +118,7 @@ public class TrombiFragment extends Fragment {
                     ApiIntra.getPhoto(login);
                     SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
                     String photoResponse = prefs.getString("photo", null);
-                    final String url2 = JsonGrabber.getVariableAndCast(photoResponse, "url");
+                    final String url2 = JsonGrabber.getVariable(photoResponse, "url");
                     InputStream is = new URL(url2).openStream();
                     d = Drawable.createFromStream(is, "picture");
                 } catch (Exception e) {

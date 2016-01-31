@@ -20,8 +20,6 @@ import com.example.joseph.app.helper.ActiveUser;
 import com.example.joseph.app.helper.ApiIntra;
 import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.InputStream;
@@ -77,7 +75,7 @@ public class HomeFragment extends Fragment {
                         ApiIntra.getPhoto(((FrontPageActivity) getActivity()).getLogin());
                         SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
                         String response = prefs.getString("photo", null);
-                        final String url2 = JsonGrabber.getVariableAndCast(response, "url");
+                        final String url2 = JsonGrabber.getVariable(response, "url");
                         InputStream is = new URL(url2).openStream();
                         final Drawable d = Drawable.createFromStream(is, "picture");
                         user.setUserImage(d);
@@ -117,17 +115,17 @@ public class HomeFragment extends Fragment {
                     String login = ((FrontPageActivity) getActivity()).getLogin();
                     final String response = ApiIntra.getUser(login);
 
-                    String hour = JsonGrabber.getVariableAndCast(response, "nsstat", "active");
+                    String hour = JsonGrabber.getVariable(response, "nsstat", "active");
                     final String hours = hour == null ? "0" : hour;
-                    String name = JsonGrabber.getVariableAndCast(response, "title");
+                    String name = JsonGrabber.getVariable(response, "title");
                     final String goodName = name == null ? "Leeroy Jenkins" : name;
-                    String gpa = JsonGrabber.getVariableAndCast(response, "gpa", "gpa");
+                    String gpa = JsonGrabber.getVariable(response, "gpa", "gpa");
                     final String goodGPA = gpa == null ? "0" : gpa;
-                    String promo = JsonGrabber.getVariableAndCast(response, "promo");
+                    String promo = JsonGrabber.getVariable(response, "promo");
                     final String goodPromo = promo == null ? "2018" : promo;
-                    String loc = JsonGrabber.getVariableAndCast(response, "location");
+                    String loc = JsonGrabber.getVariable(response, "location");
                     final String goodloc = loc == null ? "FR/PAR" : loc;
-                    String studentyear = JsonGrabber.getVariableAndCast(response, "studentyear");
+                    String studentyear = JsonGrabber.getVariable(response, "studentyear");
                     final String goodyear = loc == null ? "1" : studentyear;
                     user.setLogTime(hours);
                     user.setFullName(goodName);
@@ -135,7 +133,7 @@ public class HomeFragment extends Fragment {
                     user.setPromo(Integer.parseInt(goodPromo));
                     user.setLocation(goodloc);
                     user.setStudentYear(Integer.parseInt(goodyear));
-                    user.setSemester(Integer.parseInt((String)JsonGrabber.getVariableAndCast(response, "semester")));
+                    user.setSemester(Integer.parseInt((String)JsonGrabber.getVariable(response, "semester")));
 
                     handler.post(new Runnable() {
                         @Override

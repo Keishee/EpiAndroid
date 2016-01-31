@@ -13,7 +13,7 @@ import com.google.gson.JsonParser;
 public class JsonGrabber {
     private static final String TAG = "JsonGrabber";
 
-    public static <T> T getVariableAndCast(String response, String... args) {
+    public static String getVariable(String response, String... args) {
         JsonParser parser = new JsonParser();
         if (response.isEmpty())
             return null;
@@ -28,7 +28,7 @@ public class JsonGrabber {
                 JsonArray array = (JsonArray)elem.getAsJsonArray();
                 elem = getVariableFromArray(array, token);
             } else {
-                return (T)elem.getAsString();
+                return elem.getAsString();
             }
         }
         if (elem == null) {
@@ -39,7 +39,7 @@ public class JsonGrabber {
             Log.e(TAG, "path \"" + buffer.toString() + "\" is wrong / doesn't exist");
             return null;
         }
-        return (T)elem.getAsString();
+        return elem.getAsString();
     }
 
     public static JsonArray getArrayFromPath(String response, String... args) {
@@ -64,7 +64,7 @@ public class JsonGrabber {
             return null;
         return elem.isJsonArray() ? (JsonArray)elem : null;
     }
-    
+
     private static JsonElement getVariableFromArray(JsonArray array, String token) {
         for (int i = 0; i < array.size(); i++) {
             JsonElement element = null;

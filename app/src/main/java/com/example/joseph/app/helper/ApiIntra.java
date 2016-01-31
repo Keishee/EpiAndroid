@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.joseph.app.json.JsonGrabber;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 /**
  * Created by Alex on 20/01/2016.
@@ -22,7 +20,7 @@ public class ApiIntra {
 
     public static void postToken(String name, String password) {
         String tmp = ApiManager.postApiCall("login", "login", name, "password", password);
-        _token = JsonGrabber.getVariableAndCast(tmp, "token");
+        _token = JsonGrabber.getVariable(tmp, "token");
         Log.i("ApiIntra", "Token: " + _token);
     }
 
