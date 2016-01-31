@@ -201,7 +201,7 @@ public class GradeFragment extends Fragment {
                             MarksListView.setAdapter(MarkscustomAdapter);
                         }
                     });
-                    Button b = (Button)  getActivity().findViewById(R.id.refreshButton);
+                    Button b = (Button)  getActivity().findViewById(R.id.refreshGradeButton);
                     b.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
