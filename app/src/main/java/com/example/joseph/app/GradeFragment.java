@@ -83,17 +83,20 @@ public class GradeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void updateJson()
-    {
-        final SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+    public void updateJson() {
+        try {
+            final SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
 
-        ApiIntra.getMarks();
-        String MarksJson = prefs.getString("marks", null);
-        mark = JsonGrabber.getArrayFromPath(MarksJson, "notes");
+            ApiIntra.getMarks();
+            String MarksJson = prefs.getString("marks", null);
+            mark = JsonGrabber.getArrayFromPath(MarksJson, "notes");
 
-        ApiIntra.getModules();
-        String ModuleJson = prefs.getString("modules", null);
-        module = JsonGrabber.getArrayFromPath(ModuleJson, "modules");
+            ApiIntra.getModules();
+            String ModuleJson = prefs.getString("modules", null);
+            module = JsonGrabber.getArrayFromPath(ModuleJson, "modules");
+        } catch (Exception e) {
+            Log.e(TAG, "Error: " + e.getMessage());
+        }
     }
 
     private ArrayList<String> createSemestre() {
