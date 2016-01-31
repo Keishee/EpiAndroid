@@ -3,7 +3,6 @@ package com.example.joseph.app;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -15,11 +14,9 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Switch;
 
-import com.example.joseph.app.adapter.messageListViewAdapter;
 import com.example.joseph.app.adapter.planningListViewAdapter;
 import com.example.joseph.app.helper.ActiveUser;
 import com.example.joseph.app.helper.ApiIntra;
-import com.example.joseph.app.helper.ApiManager;
 import com.example.joseph.app.helper.PlanningInfo;
 import com.example.joseph.app.json.JsonGrabber;
 import com.google.gson.JsonArray;
@@ -27,14 +24,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.json.JSONArray;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 
 /**
@@ -94,7 +88,12 @@ public class PlanningFragment extends Fragment {
     private int getUserSemester() {
         final ActiveUser user = ((FrontPageActivity) getActivity()).getUser();
         String response = ApiIntra.getUser(user.getLogin());
-        return JsonGrabber.getVariableAndCast(response, "semester");
+        String semester = JsonGrabber.getVariable(response, "semester");
+        Integer i = null;
+        try {
+            i = Integer.parseInt(semester);
+        } catch (Exception e) {i = 0;}
+        return i;
     }
 
     private void getWeeklySemesterCoursesAndShow() {
