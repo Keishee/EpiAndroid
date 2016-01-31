@@ -85,6 +85,8 @@ public class GradeFragment extends Fragment {
 
     public void updateJson() {
         try {
+            if (getActivity() == null)
+                return;
             final SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
 
             ApiIntra.getMarks();
@@ -121,6 +123,8 @@ public class GradeFragment extends Fragment {
         new Thread(new Runnable() {
             public void run() {
                 try {
+                    if (getActivity() == null)
+                        return;
                     final SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
                     final ArrayList<String> semester;
 
@@ -143,6 +147,8 @@ public class GradeFragment extends Fragment {
 
                     semester = createSemestre();
 
+                    if (getActivity() == null)
+                        return;
                     final ListView lv = (ListView) getActivity().findViewById(R.id.SemestreListView);
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
@@ -171,6 +177,8 @@ public class GradeFragment extends Fragment {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
+                                        if (getActivity() == null)
+                                            return;
                                         ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
                                         if (MarksListView == null)
                                             return ;
