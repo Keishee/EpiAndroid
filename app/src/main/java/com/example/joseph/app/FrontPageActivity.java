@@ -1,15 +1,10 @@
 package com.example.joseph.app;
 
 import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 
 import com.example.joseph.app.helper.ActiveUser;
 import com.example.joseph.app.helper.ApiIntra;
@@ -113,10 +107,12 @@ public class FrontPageActivity extends AppCompatActivity
             loadFragment(2);
         } else if (id == R.id.nav_module) {
             loadFragment(3);
-        } else if (id == R.id.nav_grade) {
+        } else if (id == R.id.nav_project) {
             loadFragment(4);
-        } else if (id == R.id.nav_trombi) {
+        } else if (id == R.id.nav_grade) {
             loadFragment(5);
+        } else if (id == R.id.nav_trombi) {
+            loadFragment(6);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -154,9 +150,12 @@ public class FrontPageActivity extends AppCompatActivity
                 currentFragment = new ModuleFragment();
                 break;
             case 4:
-                currentFragment = new GradeFragment();
+                currentFragment = new ProjectFragment();
                 break;
             case 5:
+                currentFragment = new GradeFragment();
+                break;
+            case 6:
                 currentFragment = new TrombiFragment();
                 break;
         }

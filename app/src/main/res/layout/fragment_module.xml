@@ -18,19 +18,25 @@
                 android:id="@+id/moduleListView"
                 android:layout_gravity="center_horizontal|bottom" />
 
-            <Switch
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/moduleSwitch"
-                android:layout_gravity="left|top"
-                android:text="@string/toggle_registered_text" />
+                android:layout_height="wrap_content">
 
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/onGoingOnly"
-                android:id="@+id/onGoingSwitch"
-                android:layout_gravity="center_horizontal|top" />
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/moduleSwitch"
+                    android:layout_gravity="left|top"
+                    android:text="@string/toggle_registered_text" />
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onGoingOnly"
+                    android:id="@+id/onGoingSwitch"
+                    android:layout_gravity="center_horizontal|top" />
+            </LinearLayout>
 
             <Button
                 style="?android:attr/buttonStyleSmall"

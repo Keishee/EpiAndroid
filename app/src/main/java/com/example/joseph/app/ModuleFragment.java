@@ -160,8 +160,6 @@ public class ModuleFragment extends Fragment {
                     if (modules.isEmpty())
                         return;
 
-                    Log.i(TAG, modules);
-
                     JsonArray arr = JsonGrabber.getArrayFromPath(modules, "items");
 
                     if (registered) {
@@ -237,8 +235,6 @@ public class ModuleFragment extends Fragment {
 
                     if (modules.isEmpty())
                         return;
-
-                    Log.i(TAG, modules);
 
                     JsonArray arr = JsonGrabber.getArrayFromPath(modules, "items");
 

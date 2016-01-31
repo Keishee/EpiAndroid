@@ -91,11 +91,12 @@ public class ApiIntra {
         String tmp = "";
     }
 
-    public static void getProjects() {
+    public static String getProjects() {
         String tmp = ApiManager.getApiCall("projects", "token", _token);
         SharedPreferences.Editor editor = activity.getPreferences(activity.MODE_PRIVATE).edit();
         editor.putString("projects", tmp);
         editor.commit();
+        return tmp;
     }
 
     /**
@@ -105,7 +106,7 @@ public class ApiIntra {
      * "codeacti":"acti-167486"
      **/
     public static String getProject(String schoolYear, String codeModule, String codeInstance, String codeActi) {
-        return ApiManager.getApiCall("project", "token", _token, "schoolyear", schoolYear, "codemodule", codeModule, "codeinstance", codeInstance, "codeacti", codeActi);
+        return ApiManager.getApiCall("project", "token", _token, "scolaryear", schoolYear, "codemodule", codeModule, "codeinstance", codeInstance, "codeacti", codeActi);
     }
 
     /**
