@@ -10,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 
 import com.example.joseph.app.adapter.ProjectMainListViewAdapter;
 import com.example.joseph.app.adapter.moduleListViewAdapter;
@@ -55,9 +58,31 @@ public class ProjectFragment extends Fragment {
         return rootView = inflater.inflate(R.layout.fragment_project, container, false);
     }
 
+    private Boolean registered = false;
+
     @Override
     public void onStart() {
         super.onStart();
+        Switch s = (Switch) rootView.findViewById(R.id.projectSwitch);
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && !registered) {
+                    registered = true;
+                    loadProject();
+                } else if (!isChecked && registered) {
+                    registered = false;
+                    loadProject();
+                }
+            }
+        });
+        Button b = (Button) rootView.findViewById(R.id.projectRefreshButton);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshProject();
+            }
+        });
         loadProject();
     }
 
@@ -66,12 +91,12 @@ public class ProjectFragment extends Fragment {
         new Thread(new Runnable() {
             public void run() {
                 try {
-//                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-//                    String projects = prefs.getString("projects", "");
-//
-//                    if (projects.isEmpty()) {
-                        String projects = ApiIntra.getProjects();
-//                    }
+                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                    String projects = prefs.getString("projects", "");
+
+                    if (projects.isEmpty()) {
+                        projects = ApiIntra.getProjects();
+                    }
 
                     JsonArray array = JsonGrabber.getArrayFromPath(projects);
 
@@ -81,7 +106,52 @@ public class ProjectFragment extends Fragment {
 
                         JsonElement test = jo.get("project");
                         if (!test.isJsonNull()) {
-                            tmp.add(e);
+                            String r = jo.get("registered").getAsString();
+                            if ((registered && r.equals("1")) || !registered)
+                                tmp.add(e);
+                        }
+                    }
+
+                    final JsonArray arr = tmp;
+
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ListView yourListView = (ListView) rootView.findViewById(R.id.projectMainListView);
+                            if (yourListView == null)
+                                return;
+                            ProjectMainListViewAdapter customAdapter = new ProjectMainListViewAdapter(getActivity().getApplicationContext(), arr);
+                            yourListView.setAdapter(customAdapter);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        }).start();
+    }
+
+    public void refreshProject() {
+        final Handler handler = new Handler();
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+
+                    String projects = ApiIntra.getProjects();
+
+
+                    JsonArray array = JsonGrabber.getArrayFromPath(projects);
+
+                    JsonArray tmp = new JsonArray();
+                    for (JsonElement e : array) {
+                        JsonObject jo = e.getAsJsonObject();
+
+                        JsonElement test = jo.get("project");
+                        if (!test.isJsonNull()) {
+                            String r = jo.get("registered").getAsString();
+                            if ((registered && r.equals("1")) || !registered)
+                                tmp.add(e);
                         }
                     }
 
