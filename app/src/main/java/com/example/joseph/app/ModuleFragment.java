@@ -347,6 +347,8 @@ public class ModuleFragment extends Fragment {
                             tv = (TextView) rootView.findViewById(R.id.endDateTextView);
                             tv.setText(end);
 
+                            if (getActivity() == null)
+                                return;
                             ListView yourListView = (ListView) getActivity().findViewById(R.id.projectListView);
                             if (yourListView == null)
                                 return;

@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import com.google.gson.JsonParser;
 
 import com.google.gson.JsonArray;
 //import org.json.JSONArray;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,10 +47,15 @@ import java.util.logging.Handler;
  */
 public class GradeFragment extends Fragment {
     private final String TAG = "GradeFragment";
+
     private String currentSemester = "1";
     private String currentCodeModule = "";
+
     private ArrayList<String> ModulesArrays = null;
     private ArrayList<MarkInfo> MarksArrays = null;
+
+    private JsonArray module;
+    private JsonArray mark;
 
     private View view;
 
@@ -76,6 +83,27 @@ public class GradeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    public void updateJson()
+    {
+        final SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+
+        ApiIntra.getMarks();
+        String MarksJson = prefs.getString("marks", null);
+        mark = JsonGrabber.getArrayFromPath(MarksJson, "notes");
+
+        ApiIntra.getModules();
+        String ModuleJson = prefs.getString("modules", null);
+        module = JsonGrabber.getArrayFromPath(ModuleJson, "modules");
+    }
+
+    private ArrayList<String> createSemestre() {
+        final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
+        ArrayList<String> semester = new ArrayList<>();
+        for (int i = 0; i <= user.getSemester(); i++) {
+            semester.add(i, "Semester " + Integer.toString(i));
+        }
+        return semester;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,42 +113,32 @@ public class GradeFragment extends Fragment {
         return view;
     }
 
-
-    private void getAllMarks() {
+        private void getAllMarks() {
         final android.os.Handler handler = new android.os.Handler();
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-                    final ActiveUser user = ((FrontPageActivity)getActivity()).getUser();
-                    JsonArray TmpMarksArray;
-                    JsonArray TmpModulesArray;
+                    final SharedPreferences prefs = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+                    final ArrayList<String> semester;
 
                     String MarksJson = prefs.getString("marks", "");
                     if (MarksJson.isEmpty()) {
                         ApiIntra.getMarks();
                         MarksJson = prefs.getString("marks", null);
                     }
-                    TmpMarksArray = JsonGrabber.getArrayFromPath(MarksJson, "notes");
+                    mark = JsonGrabber.getArrayFromPath(MarksJson, "notes");
 
                     String ModuleJson = prefs.getString("modules", "");
                     if (ModuleJson.isEmpty()){
                         ApiIntra.getModules();
                         ModuleJson = prefs.getString("modules", null);
                     }
+                    module = JsonGrabber.getArrayFromPath(ModuleJson, "modules");
 
-                    TmpModulesArray = JsonGrabber.getArrayFromPath(ModuleJson, "modules");
-                    final JsonArray MarksArray = TmpMarksArray;
-                    final JsonArray ModulesArray = TmpModulesArray;
+                    final JsonArray MarksArray = mark;
+                    final JsonArray ModulesArray = module;
 
-                    if (MarksArray == null || ModulesArray == null)
-                        return;
-
-                    final ArrayList<String> semester = new ArrayList<>();
-
-                    for (int i = 0; i <= user.getSemester(); i++) {
-                        semester.add(i, "Semester " + Integer.toString(i));
-                    }
+                    semester = createSemestre();
 
                     final ListView lv = (ListView) getActivity().findViewById(R.id.SemestreListView);
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -159,29 +177,35 @@ public class GradeFragment extends Fragment {
                                 });
                             }
                         }});
-
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (getActivity() == null)
                                 return;
-                            ListView SemesterListView = (ListView)getActivity().findViewById(R.id.SemestreListView);
+                            ListView SemesterListView = (ListView) getActivity().findViewById(R.id.SemestreListView);
                             if (SemesterListView == null)
-                                return ;
+                                return;
                             semesterListViewAdapter SemesterCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), semester);
                             SemesterListView.setAdapter(SemesterCustomAdapter);
 
                             ListView ModuleListView = (ListView) getActivity().findViewById(R.id.ModuleListView);
                             if (ModuleListView == null)
-                                return ;
+                                return;
                             semesterListViewAdapter ModuleCustomAdapter = new semesterListViewAdapter(getActivity().getApplicationContext(), ModulesArrays);
                             ModuleListView.setAdapter(ModuleCustomAdapter);
 
                             ListView MarksListView = (ListView) getActivity().findViewById(R.id.MarksListView);
                             if (MarksListView == null)
-                                return ;
+                                return;
                             markListViewAdapter MarkscustomAdapter = new markListViewAdapter(getActivity().getApplicationContext(), MarksArrays);
                             MarksListView.setAdapter(MarkscustomAdapter);
+                        }
+                    });
+                    Button b = (Button)  getActivity().findViewById(R.id.refreshButton);
+                    b.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            updateJson();
                         }
                     });
                 } catch (Exception e) {
